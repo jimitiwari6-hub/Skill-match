@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Skill Match — Check Your Job Readiness Instantly</title>
+  <meta name="description"
+    content="Skill Match helps you evaluate your suitability for different job roles, identify skill gaps, and get personalized improvement suggestions." />
+  <link rel="stylesheet" href="styles.css?v=3" />
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>" />
+</head>
+
+<body>
+
+  <!-- ══════════ NAVBAR ══════════ -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <div class="logo-icon">🎯</div>
+        <span>Skill Match </span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link active">Home</a>
+        <a href="roles.html" class="nav-link">Explore Roles</a>
+        <a href="#features" class="nav-link">Features</a>
+        <a href="#how-it-works" class="nav-link">How It Works</a>
+        <a href="#contact" class="nav-link">Contact</a>
+      </div>
+      <div class="nav-actions">
+        <button class="btn-dark-mode" id="themeToggle" title="Toggle dark mode">🌙</button>
+        <a href="roles.html" class="btn btn-primary btn-sm">Get Started →</a>
+        <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html" class="mobile-nav-link">🏠 Home</a>
+    <a href="roles.html" class="mobile-nav-link">💼 Explore Roles</a>
+    <a href="#features" class="mobile-nav-link">⚡ Features</a>
+    <a href="#how-it-works" class="mobile-nav-link">🗺️ How It Works</a>
+    <a href="#contact" class="mobile-nav-link">✉️ Contact Us</a>
+  </div>
+
+  <!-- ══════════ HERO ══════════ -->
+  <section class="hero" id="hero">
+    <div class="hero-bg">
+      <canvas id="particles-canvas"></canvas>
+      <div class="hero-blob hero-blob-1"></div>
+      <div class="hero-blob hero-blob-2"></div>
+      <div class="hero-blob hero-blob-3"></div>
+      <div class="hero-blob hero-blob-4"></div>
+      <div class="hero-blob hero-blob-5"></div>
+      <div class="hero-blob hero-blob-6"></div>
+      <div class="hero-grid-pattern"></div>
+    </div>
+
+    <div class="hero-content">
+      <!-- Left Column -->
+      <div class="hero-left">
+        <div class="hero-badge">
+          <span class="dot"></span>
+          AI-Powered Career Intelligence
+        </div>
+        <h1 class="hero-title" id="dynamicHeroTitle">
+          Check Your <span class="text-gradient">Job Readiness</span><br />Instantly
+        </h1>
+        <p class="hero-desc" id="dynamicHeroDesc">
+          Discover how well your skills match your dream job role. Get a detailed gap analysis, personalized learning
+          roadmap, and curated resources — all powered by AI.
+        </p>
+        <div class="hero-actions">
+          <a href="roles.html" class="btn btn-primary btn-lg" id="cta-hero">
+            🚀 Get Started Free
+          </a>
+          <a href="#how-it-works" class="btn btn-secondary btn-lg">
+            ▶ See How It Works
+          </a>
+        </div>
+        <div class="hero-stats">
+          <div>
+            <div class="hero-stat-value" id="dynamicHeroStatStudents">10K+</div>
+            <div class="hero-stat-label">Students Helped</div>
+          </div>
+          <div style="width:1px;background:var(--border)"></div>
+          <div>
+            <div class="hero-stat-value" id="dynamicHeroStatRoles">6</div>
+            <div class="hero-stat-label">Job Roles</div>
+          </div>
+          <div style="width:1px;background:var(--border)"></div>
+          <div>
+            <div class="hero-stat-value" id="dynamicHeroStatAccuracy">95%</div>
+            <div class="hero-stat-label">Accuracy Rate</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column - Visual -->
+      <div class="hero-visual">
+        <!-- Float card top-right -->
+        <div class="hero-card-float hero-card-float-1">
+          <div
+            style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#10b981,#06b6d4);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;">
+            ✅</div>
+          <div>
+            <div style="font-size:.8rem;font-weight:700;">Match Found!</div>
+            <div style="font-size:.75rem;color:var(--text-muted);">Data Scientist — 84%</div>
+          </div>
+        </div>
+
+        <!-- Main Card -->
+        <div class="hero-card-main">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+            <div
+              style="width:42px;height:42px;border-radius:10px;background:linear-gradient(135deg,#6366f1,#a855f7);display:flex;align-items:center;justify-content:center;font-size:1.2rem;">
+              🧑‍💻</div>
+            <div>
+              <div style="font-weight:700;font-size:.95rem;">Software Developer</div>
+              <div style="font-size:.78rem;color:var(--text-muted);">Skill Analysis Report</div>
+            </div>
+            <div class="badge badge-success" style="margin-left:auto;">Live</div>
+          </div>
+
+          <!-- Mini circular score -->
+          <div style="text-align:center;margin:16px 0 20px;">
+            <svg width="120" height="120" viewBox="0 0 120 120">
+              <circle cx="60" cy="60" r="50" fill="none" stroke="var(--surface)" stroke-width="8" />
+              <circle cx="60" cy="60" r="50" fill="none" stroke="url(#heroGrad)" stroke-width="8" stroke-linecap="round"
+                stroke-dasharray="314" stroke-dashoffset="75" transform="rotate(-90 60 60)" />
+              <defs>
+                <linearGradient id="heroGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#6366f1" />
+                  <stop offset="100%" stop-color="#a855f7" />
+                </linearGradient>
+              </defs>
+              <text x="60" y="55" text-anchor="middle" font-size="22" font-weight="800" fill="var(--text-primary)"
+                font-family="'Plus Jakarta Sans',sans-serif">76%</text>
+              <text x="60" y="72" text-anchor="middle" font-size="9" fill="var(--text-muted)"
+                font-family="Inter,sans-serif">MATCH SCORE</text>
+            </svg>
+          </div>
+
+          <!-- Skill bars -->
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:.8rem;margin-bottom:5px;"><span
+                  style="font-weight:600;">Python</span><span
+                  style="color:var(--success);font-weight:700;">Advanced</span></div>
+              <div class="progress-bar-wrap">
+                <div class="progress-bar-fill" style="width:88%;background:linear-gradient(90deg,#10b981,#06b6d4);">
+                </div>
+              </div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:.8rem;margin-bottom:5px;"><span
+                  style="font-weight:600;">Data Structures</span><span
+                  style="color:var(--primary);font-weight:700;">Intermediate</span></div>
+              <div class="progress-bar-wrap">
+                <div class="progress-bar-fill" style="width:60%;"></div>
+              </div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:.8rem;margin-bottom:5px;"><span
+                  style="font-weight:600;">System Design</span><span
+                  style="color:var(--warning);font-weight:700;">Weak</span></div>
+              <div class="progress-bar-wrap">
+                <div class="progress-bar-fill" style="width:30%;background:linear-gradient(90deg,#f59e0b,#ef4444);">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Float card bottom-left -->
+        <div class="hero-card-float hero-card-float-2">
+          <div style="font-size:1.3rem;">📚</div>
+          <div>
+            <div style="font-size:.78rem;font-weight:700;">3 Resources Found</div>
+            <div style="font-size:.72rem;color:var(--text-muted);">Tailored for you</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ TRUSTED BY ══════════ -->
+  <section
+    style="padding:32px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--bg-secondary);">
+    <div class="container">
+      <div style="display:flex;align-items:center;gap:32px;flex-wrap:wrap;justify-content:center;">
+        <span
+          style="font-size:.8rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.1em;">Trusted
+          by students from</span>
+        <div style="display:flex;gap:32px;flex-wrap:wrap;align-items:center;opacity:.5;">
+          <span style="font-weight:800;font-size:1.1rem;">IIT Delhi</span>
+          <span style="font-weight:800;font-size:1.1rem;">NIT</span>
+          <span style="font-weight:800;font-size:1.1rem;">VIT</span>
+          <span style="font-weight:800;font-size:1.1rem;">BITS Pilani</span>
+          <span style="font-weight:800;font-size:1.1rem;">Anna Univ</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ FEATURES ══════════ -->
+  <section class="section" id="features">
+    <div class="container">
+      <div class="text-center" style="margin-bottom:52px;">
+        <div class="section-label reveal">Core Capabilities</div>
+        <h2 class="section-title reveal animate-delay-1">Everything You Need to<br /><span class="text-gradient">Land
+            Your Dream Job</span></h2>
+        <p class="section-desc reveal animate-delay-2" style="margin:0 auto;">From skill gap analysis to personalized
+          roadmaps — Skill Match gives you a complete career readiness suite.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card reveal">
+          <div class="feature-icon feature-icon-1">🧠</div>
+          <div class="feature-title">AI Skill Analysis</div>
+          <div class="feature-desc">Our AI engine evaluates your skills against industry benchmarks and provides a
+            detailed match score for your target role.</div>
+        </div>
+        <div class="feature-card reveal animate-delay-1">
+          <div class="feature-icon feature-icon-2">📊</div>
+          <div class="feature-title">Match Score Dashboard</div>
+          <div class="feature-desc">Visualize your job readiness with an interactive score dashboard showing strong,
+            weak, and missing skills at a glance.</div>
+        </div>
+        <div class="feature-card reveal animate-delay-2">
+          <div class="feature-icon feature-icon-3">🗺️</div>
+          <div class="feature-title">Career Roadmap</div>
+          <div class="feature-desc">Get a step-by-step personalized learning path that guides you from your current
+            level to job-ready in the most efficient way.</div>
+        </div>
+        <div class="feature-card reveal animate-delay-3">
+          <div class="feature-icon feature-icon-4">📚</div>
+          <div class="feature-title">Curated Resources</div>
+          <div class="feature-desc">Access hand-picked courses, tutorials, and projects from Coursera, Udemy, YouTube,
+            and more — filtered for your exact skill gaps.</div>
+        </div>
+        <div class="feature-card reveal animate-delay-4">
+          <div class="feature-icon feature-icon-5">⚡</div>
+          <div class="feature-title">Instant Feedback</div>
+          <div class="feature-desc">Real-time AI suggestions pop up as you add skills, helping you understand what to
+            prioritize and what to learn next.</div>
+        </div>
+        <div class="feature-card reveal animate-delay-5">
+          <div class="feature-icon feature-icon-6">🔗</div>
+          <div class="feature-title">Save & Share Results</div>
+          <div class="feature-desc">Save your readiness report to your profile and share it with recruiters or mentors
+            with a single shareable link.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ HOW IT WORKS ══════════ -->
+  <section class="section" id="how-it-works" style="background:var(--bg-secondary);">
+    <div class="container">
+      <div class="how-it-works-grid">
+        <div>
+          <div class="section-label reveal">Simple Process</div>
+          <h2 class="section-title reveal animate-delay-1">Get Your Results in<br /><span class="text-gradient">3 Easy
+              Steps</span></h2>
+          <p class="section-desc reveal animate-delay-2">No complex setup. Just pick your role, add your skills, and let
+            our AI do the rest.</p>
+          <div style="margin-top:36px;">
+            <div class="how-step reveal animate-delay-1">
+              <div class="how-step-num">1</div>
+              <div>
+                <div class="how-step-title">Choose Your Target Role</div>
+                <div class="how-step-desc">Browse 6 in-demand tech job roles and select the one you're aiming for — from
+                  Software Developer to Cloud Engineer.</div>
+              </div>
+            </div>
+            <div class="how-step reveal animate-delay-2">
+              <div class="how-step-num">2</div>
+              <div>
+                <div class="how-step-title">Enter Your Skills & Levels</div>
+                <div class="how-step-desc">Add your current skills and rate your proficiency level. Our smart
+                  autocomplete suggests relevant skills for your chosen role.</div>
+              </div>
+            </div>
+            <div class="how-step reveal animate-delay-3" style="margin-bottom:0;">
+              <div class="how-step-num">3</div>
+              <div>
+                <div class="how-step-title">Get Your Readiness Report</div>
+                <div class="how-step-desc">Instantly receive your match score, a breakdown of strong/weak/missing
+                  skills, and a personalized improvement plan.</div>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:32px;" class="reveal animate-delay-4">
+            <a href="roles.html" class="btn btn-primary btn-lg">Start Your Assessment →</a>
+          </div>
+        </div>
+        <div class="reveal animate-delay-2">
+          <!-- Visual mockup of Results Page -->
+          <div
+            style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;box-shadow:var(--shadow-xl);">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
+              <div style="width:10px;height:10px;border-radius:50%;background:#ef4444;"></div>
+              <div style="width:10px;height:10px;border-radius:50%;background:#f59e0b;"></div>
+              <div style="width:10px;height:10px;border-radius:50%;background:#10b981;"></div>
+              <div
+                style="flex:1;background:var(--surface);border-radius:4px;height:20px;margin-left:12px;display:flex;align-items:center;padding:0 10px;font-size:.72rem;color:var(--text-muted);">
+                skill-match.app/results</div>
+            </div>
+            <div style="display:flex;gap:16px;margin-bottom:20px;">
+              <div style="text-align:center;flex:1;">
+                <svg width="90" height="90" viewBox="0 0 90 90">
+                  <circle cx="45" cy="45" r="36" fill="none" stroke="var(--surface)" stroke-width="7" />
+                  <circle cx="45" cy="45" r="36" fill="none" stroke="url(#g1)" stroke-width="7" stroke-linecap="round"
+                    stroke-dasharray="226" stroke-dashoffset="40" transform="rotate(-90 45 45)" />
+                  <defs>
+                    <linearGradient id="g1" x1="0%" y1="0%" x2="100%">
+                      <stop offset="0%" stop-color="#6366f1" />
+                      <stop offset="100%" stop-color="#a855f7" />
+                    </linearGradient>
+                  </defs>
+                  <text x="45" y="49" text-anchor="middle" font-size="16" font-weight="800" fill="var(--text-primary)"
+                    font-family="'Plus Jakarta Sans',sans-serif">82%</text>
+                </svg>
+                <div style="font-size:.75rem;color:var(--text-muted);font-weight:600;">Match Score</div>
+              </div>
+              <div style="flex:2;">
+                <div style="font-size:.78rem;font-weight:700;margin-bottom:8px;color:var(--text-secondary);">Skill
+                  Breakdown</div>
+                <div style="display:flex;flex-direction:column;gap:6px;">
+                  <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:.8rem;">✅</span><span
+                      style="font-size:.78rem;flex:1;">Python, SQL, ML</span><span class="badge badge-success"
+                      style="font-size:.68rem;">Strong</span></div>
+                  <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:.8rem;">⚠️</span><span
+                      style="font-size:.78rem;flex:1;">Statistics</span><span class="badge badge-warning"
+                      style="font-size:.68rem;">Weak</span></div>
+                  <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:.8rem;">❌</span><span
+                      style="font-size:.78rem;flex:1;">Deep Learning</span><span class="badge badge-danger"
+                      style="font-size:.68rem;">Missing</span></div>
+                </div>
+              </div>
+            </div>
+            <div
+              style="background:linear-gradient(135deg,#6366f1,#a855f7);border-radius:var(--radius);padding:14px 16px;color:#fff;">
+              <div style="font-size:.78rem;font-weight:700;margin-bottom:4px;">🤖 AI Suggestion</div>
+              <div style="font-size:.78rem;opacity:.85;line-height:1.5;">Focus on Statistics and TensorFlow. 2-3 months
+                of consistent practice will boost your score to 95%+</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ JOB ROLES PREVIEW ══════════ -->
+  <section class="section">
+    <div class="container">
+      <div class="text-center" style="margin-bottom:48px;">
+        <div class="section-label reveal">Choose Your Path</div>
+        <h2 class="section-title reveal animate-delay-1">6 In-Demand Tech Roles<br /><span class="text-gradient">Ready
+            for You</span></h2>
+      </div>
+      <div class="job-roles-preview-grid reveal animate-delay-2" style="margin-bottom:36px;">
+        <div
+          style="text-align:center;padding:20px 12px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);transition:var(--transition);cursor:pointer;"
+          onmouseover="this.style.transform='translateY(-6px)';this.style.borderColor='#6366f1'"
+          onmouseout="this.style.transform='';this.style.borderColor=''">
+          <div style="font-size:2rem;margin-bottom:8px;">🧑‍💻</div>
+          <div style="font-size:.8rem;font-weight:700;">Software Dev</div>
+        </div>
+        <div
+          style="text-align:center;padding:20px 12px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);transition:var(--transition);cursor:pointer;"
+          onmouseover="this.style.transform='translateY(-6px)';this.style.borderColor='#a855f7'"
+          onmouseout="this.style.transform='';this.style.borderColor=''">
+          <div style="font-size:2rem;margin-bottom:8px;">🎨</div>
+          <div style="font-size:.8rem;font-weight:700;">UI/UX Designer</div>
+        </div>
+        <div
+          style="text-align:center;padding:20px 12px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);transition:var(--transition);cursor:pointer;"
+          onmouseover="this.style.transform='translateY(-6px)';this.style.borderColor='#06b6d4'"
+          onmouseout="this.style.transform='';this.style.borderColor=''">
+          <div style="font-size:2rem;margin-bottom:8px;">🔐</div>
+          <div style="font-size:.8rem;font-weight:700;">Cybersecurity</div>
+        </div>
+        <div
+          style="text-align:center;padding:20px 12px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);transition:var(--transition);cursor:pointer;"
+          onmouseover="this.style.transform='translateY(-6px)';this.style.borderColor='#10b981'"
+          onmouseout="this.style.transform='';this.style.borderColor=''">
+          <div style="font-size:2rem;margin-bottom:8px;">📊</div>
+          <div style="font-size:.8rem;font-weight:700;">Data Scientist</div>
+        </div>
+        <div
+          style="text-align:center;padding:20px 12px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);transition:var(--transition);cursor:pointer;"
+          onmouseover="this.style.transform='translateY(-6px)';this.style.borderColor='#f59e0b'"
+          onmouseout="this.style.transform='';this.style.borderColor=''">
+          <div style="font-size:2rem;margin-bottom:8px;">☁️</div>
+          <div style="font-size:.8rem;font-weight:700;">Cloud Engineer</div>
+        </div>
+        <div
+          style="text-align:center;padding:20px 12px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);transition:var(--transition);cursor:pointer;"
+          onmouseover="this.style.transform='translateY(-6px)';this.style.borderColor='#ef4444'"
+          onmouseout="this.style.transform='';this.style.borderColor=''">
+          <div style="font-size:2rem;margin-bottom:8px;">⚙️</div>
+          <div style="font-size:.8rem;font-weight:700;">DevOps Engineer</div>
+        </div>
+      </div>
+      <div class="text-center reveal animate-delay-3">
+        <a href="roles.html" class="btn btn-primary btn-lg">Explore All Roles →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ TESTIMONIALS ══════════ -->
+  <section class="section" style="background:var(--bg-secondary);">
+    <div class="container">
+      <div class="text-center" style="margin-bottom:48px;">
+        <div class="section-label reveal">Success Stories</div>
+        <h2 class="section-title reveal animate-delay-1"
+          style="display:flex; align-items:center; justify-content:center; gap:12px;">
+          <span>Students Who Got <span class="text-gradient">Job-Ready</span></span>
+          <a href="reviews.html" target="_blank" aria-label="View all reviews"
+            style="text-decoration:none; color:var(--primary); transition:transform 0.3s; display:inline-block; font-size:2rem; line-height:1;"
+            onmouseover="this.style.transform='translateX(8px)'" onmouseout="this.style.transform='none'">→</a>
+        </h2>
+      </div>
+      <div class="grid grid-3 reveal animate-delay-2">
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <div class="testimonial-text">"Skill Match showed me exactly what I was missing for a Data Science role.
+            Within 3 months of following the roadmap, I landed my first internship at a top MNC!"</div>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar" style="background:var(--grad-sunshine); color: #000;">RK</div>
+            <div>
+              <div class="testimonial-name">Rahul Kumar</div>
+              <div class="testimonial-role">Data Science Intern @ TCS</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <div class="testimonial-text">"As a career switcher from mechanical engineering, I was lost. Skill Match
+            gave me a clear Software Dev roadmap and I went from 45% to 89% match score in 4 months."</div>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar" style="background:var(--grad-lavender);">PS</div>
+            <div>
+              <div class="testimonial-name">Priya Sharma</div>
+              <div class="testimonial-role">SDE-1 @ Infosys</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★⭐</div>
+          <div class="testimonial-text">"The skill gap analysis was spot-on. I didn't even know Docker and Kubernetes
+            were must-haves for DevOps. The course recommendations were genuinely useful."</div>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar" style="background:var(--grad-volcano);">AM</div>
+            <div>
+              <div class="testimonial-name">Arjun Mehta</div>
+              <div class="testimonial-role">DevOps Engineer @ Wipro</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+  <!-- ══════════ CONTACT US ══════════ -->
+  <section class="section" id="contact" style="background:var(--bg);position:relative;overflow:hidden;">
+
+    <!-- Ambient orbs -->
+    <div
+      style="position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(99,102,241,.06),transparent);top:-180px;left:-150px;pointer-events:none;">
+    </div>
+    <div
+      style="position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(168,85,247,.06),transparent);bottom:-150px;right:-100px;pointer-events:none;animation:float 7s ease-in-out infinite;">
+    </div>
+
+    <div class="container" style="position:relative;z-index:1;">
+
+      <!-- Header -->
+      <div class="text-center" style="margin-bottom:56px;">
+        <div class="section-label reveal">Get In Touch</div>
+        <h2 class="section-title reveal animate-delay-1">We'd Love to <span class="text-gradient">Hear From You</span>
+        </h2>
+        <p class="section-desc reveal animate-delay-2" style="margin:0 auto;">Have a question, feedback, or partnership
+          idea? Drop us a message and we'll get back to you within 24 hours.</p>
+      </div>
+
+      <div class="contact-grid">
+
+        <!-- LEFT: Info Cards -->
+        <div style="display:flex;flex-direction:column;gap:16px;" class="reveal-left">
+
+          <a href="mailto:hello@skillmatch.app" id="dynamicEmailLink"
+            style="display:flex;align-items:center;gap:18px;padding:22px 24px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);transition:all .35s cubic-bezier(.34,1.56,.64,1);"
+            onmouseover="this.style.transform='translateX(8px)';this.style.borderColor='rgba(99,102,241,.35)';this.style.boxShadow='0 10px 30px rgba(99,102,241,.1)'"
+            onmouseout="this.style.transform='';this.style.borderColor='';this.style.boxShadow=''">
+            <div
+              style="width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,rgba(99,102,241,.18),rgba(99,102,241,.06));display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;">
+              📧</div>
+            <div>
+              <div
+                style="font-size:.74rem;font-weight:800;text-transform:uppercase;letter-spacing:.09em;color:var(--primary);margin-bottom:4px;">
+                Email Us</div>
+              <div style="font-weight:700;font-size:.95rem;color:var(--text-primary);" id="dynamicEmailText">
+                hello@skillmatch.app</div>
+              <div style="font-size:.78rem;color:var(--text-muted);margin-top:2px;">We reply within 24 hours</div>
+            </div>
+          </a>
+
+          <div
+            style="display:flex;align-items:center;gap:18px;padding:22px 24px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);transition:all .35s cubic-bezier(.34,1.56,.64,1);"
+            onmouseover="this.style.transform='translateX(8px)';this.style.borderColor='rgba(168,85,247,.35)';this.style.boxShadow='0 10px 30px rgba(168,85,247,.1)'"
+            onmouseout="this.style.transform='';this.style.borderColor='';this.style.boxShadow=''">
+            <div
+              style="width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,rgba(168,85,247,.18),rgba(168,85,247,.06));display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;">
+              💬</div>
+            <div>
+              <div
+                style="font-size:.74rem;font-weight:800;text-transform:uppercase;letter-spacing:.09em;color:var(--secondary);margin-bottom:4px;">
+                Live Chat</div>
+              <div style="font-weight:700;font-size:.95rem;">Available on Platform</div>
+              <div style="font-size:.78rem;color:var(--text-muted);margin-top:2px;">Mon – Sat · 9 AM – 6 PM IST</div>
+            </div>
+          </div>
+
+          <div
+            style="display:flex;align-items:center;gap:18px;padding:22px 24px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);transition:all .35s cubic-bezier(.34,1.56,.64,1);"
+            onmouseover="this.style.transform='translateX(8px)';this.style.borderColor='rgba(16,185,129,.35)';this.style.boxShadow='0 10px 30px rgba(16,185,129,.1)'"
+            onmouseout="this.style.transform='';this.style.borderColor='';this.style.boxShadow=''">
+            <div
+              style="width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,rgba(16,185,129,.18),rgba(16,185,129,.06));display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;">
+              📍</div>
+            <div>
+              <div
+                style="font-size:.74rem;font-weight:800;text-transform:uppercase;letter-spacing:.09em;color:var(--success);margin-bottom:4px;">
+                Office</div>
+              <div style="font-weight:700;font-size:.95rem;" id="dynamicAddressText">Jalandhar, Punjab, India 🇮🇳</div>
+              <div style="font-size:.78rem;color:var(--text-muted);margin-top:2px;">City Center Area</div>
+            </div>
+          </div>
+
+          <div
+            style="display:flex;align-items:center;gap:18px;padding:22px 24px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);transition:all .35s cubic-bezier(.34,1.56,.64,1);"
+            onmouseover="this.style.transform='translateX(8px)';this.style.borderColor='rgba(245,158,11,.35)';this.style.boxShadow='0 10px 30px rgba(245,158,11,.1)'"
+            onmouseout="this.style.transform='';this.style.borderColor='';this.style.boxShadow=''">
+            <div
+              style="width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,rgba(245,158,11,.18),rgba(245,158,11,.06));display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;">
+              ⚡</div>
+            <div>
+              <div
+                style="font-size:.74rem;font-weight:800;text-transform:uppercase;letter-spacing:.09em;color:var(--warning);margin-bottom:4px;">
+                Response Time</div>
+              <div style="font-weight:700;font-size:.95rem;">Under 24 hours</div>
+              <div style="font-size:.78rem;color:var(--text-muted);margin-top:2px;">Usually much faster 🚀</div>
+            </div>
+          </div>
+
+          <!-- Social row -->
+          <div
+            style="padding:22px 24px;background:linear-gradient(135deg,rgba(99,102,241,.06),rgba(168,85,247,.06));border:1px solid rgba(99,102,241,.15);border-radius:var(--radius-md);">
+            <div style="font-weight:800;font-size:.9rem;margin-bottom:14px;">Follow Our Journey ✨</div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+              <a href="#"
+                style="display:flex;align-items:center;gap:7px;padding:8px 15px;border-radius:var(--radius-full);background:var(--bg-card);border:1px solid var(--border);font-size:.81rem;font-weight:700;color:var(--text-secondary);transition:all .3s cubic-bezier(.34,1.56,.64,1);"
+                onmouseover="this.style.background='#1d9bf0';this.style.color='#fff';this.style.borderColor='transparent';this.style.transform='translateY(-3px)';this.style.boxShadow='0 6px 16px rgba(29,155,240,.4)'"
+                onmouseout="this.style.background='';this.style.color='';this.style.borderColor='';this.style.transform='';this.style.boxShadow=''">𝕏
+                Twitter</a>
+              <a href="#" id="dynamicLinkedIn"
+                style="display:flex;align-items:center;gap:7px;padding:8px 15px;border-radius:var(--radius-full);background:var(--bg-card);border:1px solid var(--border);font-size:.81rem;font-weight:700;color:var(--text-secondary);transition:all .3s cubic-bezier(.34,1.56,.64,1);"
+                onmouseover="this.style.background='#0a66c2';this.style.color='#fff';this.style.borderColor='transparent';this.style.transform='translateY(-3px)';this.style.boxShadow='0 6px 16px rgba(10,102,194,.4)'"
+                onmouseout="this.style.background='';this.style.color='';this.style.borderColor='';this.style.transform='';this.style.boxShadow=''">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+                </svg>
+                LinkedIn</a>
+              <a href="#" id="dynamicInstagram"
+                style="display:flex;align-items:center;gap:7px;padding:8px 15px;border-radius:var(--radius-full);background:var(--bg-card);border:1px solid var(--border);font-size:.81rem;font-weight:700;color:var(--text-secondary);transition:all .3s cubic-bezier(.34,1.56,.64,1);"
+                onmouseover="this.style.background='#e1306c';this.style.color='#fff';this.style.borderColor='transparent';this.style.transform='translateY(-3px)';this.style.boxShadow='0 6px 16px rgba(225,48,108,.4)'"
+                onmouseout="this.style.background='';this.style.color='';this.style.borderColor='';this.style.transform='';this.style.boxShadow=''">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                </svg>
+                Instagram</a>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT: Contact Form -->
+        <div class="reveal-right">
+          <div
+            style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-xl);padding:40px;box-shadow:var(--shadow-lg);position:relative;overflow:hidden;">
+
+            <!-- Animated top border -->
+            <div
+              style="position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#6366f1,#a855f7,#ec4899,#06b6d4,#10b981,#6366f1);background-size:300%;animation:gradientMove 3s ease infinite;border-radius:4px 4px 0 0;">
+            </div>
+
+            <div style="margin-bottom:28px;">
+              <h3 style="font-family:var(--font-display);font-weight:900;font-size:1.4rem;margin-bottom:6px;">Send Us a
+                Message 📨</h3>
+              <p style="font-size:.88rem;color:var(--text-muted);">We read every message personally and respond quickly.
+              </p>
+            </div>
+
+            <form id="contactForm" onsubmit="submitContact(event)" novalidate>
+
+              <!-- Name + Email -->
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px;">
+                <div class="form-group" style="margin:0;">
+                  <label class="form-label" for="ctName">Your Name *</label>
+                  <input type="text" id="ctName" class="form-input" placeholder="Rahul Kumar" required />
+                </div>
+                <div class="form-group" style="margin:0;">
+                  <label class="form-label" for="ctEmail">Email Address *</label>
+                  <input type="email" id="ctEmail" class="form-input" placeholder="rahul@email.com" required />
+                </div>
+              </div>
+
+              <!-- Topic -->
+              <div class="form-group" style="margin-bottom:18px;">
+                <label class="form-label" for="ctSubject">I'm reaching out about…</label>
+                <select id="ctSubject" class="form-select">
+                  <option value="">Select a topic</option>
+                  <option value="feedback">💬 Product Feedback</option>
+                  <option value="bug">🐛 Report a Bug</option>
+                  <option value="feature">💡 Feature Request</option>
+                  <option value="partnership">🤝 Partnership / Collaboration</option>
+                  <option value="career">🎓 Career Guidance</option>
+                  <option value="other">📩 Other</option>
+                </select>
+              </div>
+
+              <!-- Message -->
+              <div class="form-group" style="margin-bottom:10px;">
+                <label class="form-label" for="ctMessage">Your Message *</label>
+                <textarea id="ctMessage" class="form-textarea" rows="5"
+                  placeholder="Tell us what's on your mind — we read every message carefully…"
+                  style="resize:vertical;min-height:130px;"
+                  oninput="document.getElementById('charCount').textContent=this.value.length+' / 1000';this.value=this.value.slice(0,1000);"
+                  required></textarea>
+                <div style="display:flex;justify-content:flex-end;margin-top:5px;">
+                  <span id="charCount" style="font-size:.75rem;color:var(--text-muted);">0 / 1000</span>
+                </div>
+              </div>
+
+              <!-- Error / Success banners -->
+              <div id="ctError"
+                style="display:none;padding:12px 16px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:var(--radius);color:var(--danger);font-size:.86rem;font-weight:600;margin-bottom:16px;">
+                ⚠️ Please fill in your name, a valid email, and a message.
+              </div>
+              <div id="ctSuccess"
+                style="display:none;padding:16px 20px;background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.25);border-radius:var(--radius);color:var(--success);font-size:.9rem;font-weight:700;margin-bottom:16px;text-align:center;animation:bounceIn .5s cubic-bezier(.34,1.56,.64,1);">
+                🎉 Message sent! We'll reply within 24 hours.
+              </div>
+
+              <!-- Submit -->
+              <button type="submit" class="btn btn-primary btn-lg" id="ctSubmitBtn"
+                style="width:100%;justify-content:center;gap:10px;">
+                <span id="ctBtnIcon">📨</span>
+                <span id="ctBtnText">Send Message</span>
+              </button>
+
+              <p style="text-align:center;margin-top:14px;font-size:.76rem;color:var(--text-muted);">🔒 Your info is
+                safe with us. We never share your data.</p>
+            </form>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- FAQ Quick Chips -->
+      <div
+        style="margin-top:52px;padding:26px 36px;background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius-lg);display:flex;align-items:center;gap:24px;flex-wrap:wrap;"
+        class="reveal">
+        <div style="flex:1;min-width:200px;">
+          <div style="font-weight:800;font-size:.95rem;margin-bottom:4px;">💡 Quick Questions?</div>
+          <div style="font-size:.84rem;color:var(--text-muted);">Check these common queries before writing — you might
+            get an instant answer!</div>
+        </div>
+        <div style="display:flex;gap:9px;flex-wrap:wrap;flex-shrink:0;">
+          <div
+            style="padding:8px 17px;border:1.5px solid var(--border);border-radius:var(--radius-full);font-size:.82rem;font-weight:700;background:var(--bg-card);cursor:pointer;transition:all .3s cubic-bezier(.34,1.56,.64,1);"
+            onmouseover="this.style.borderColor='#6366f1';this.style.color='#6366f1';this.style.transform='translateY(-3px)';this.style.boxShadow='0 4px 14px rgba(99,102,241,.2)'"
+            onmouseout="this.style.borderColor='';this.style.color='';this.style.transform='';this.style.boxShadow=''">
+            Is it free? 💸</div>
+          <div
+            style="padding:8px 17px;border:1.5px solid var(--border);border-radius:var(--radius-full);font-size:.82rem;font-weight:700;background:var(--bg-card);cursor:pointer;transition:all .3s cubic-bezier(.34,1.56,.64,1);"
+            onmouseover="this.style.borderColor='#a855f7';this.style.color='#a855f7';this.style.transform='translateY(-3px)';this.style.boxShadow='0 4px 14px rgba(168,85,247,.2)'"
+            onmouseout="this.style.borderColor='';this.style.color='';this.style.transform='';this.style.boxShadow=''">
+            How accurate is AI? 🤖</div>
+          <div
+            style="padding:8px 17px;border:1.5px solid var(--border);border-radius:var(--radius-full);font-size:.82rem;font-weight:700;background:var(--bg-card);cursor:pointer;transition:all .3s cubic-bezier(.34,1.56,.64,1);"
+            onmouseover="this.style.borderColor='#06b6d4';this.style.color='#06b6d4';this.style.transform='translateY(-3px)';this.style.boxShadow='0 4px 14px rgba(6,182,212,.2)'"
+            onmouseout="this.style.borderColor='';this.style.color='';this.style.transform='';this.style.boxShadow=''">
+            Can I save results? 💾</div>
+          <div
+            style="padding:8px 17px;border:1.5px solid var(--border);border-radius:var(--radius-full);font-size:.82rem;font-weight:700;background:var(--bg-card);cursor:pointer;transition:all .3s cubic-bezier(.34,1.56,.64,1);"
+            onmouseover="this.style.borderColor='#10b981';this.style.color='#10b981';this.style.transform='translateY(-3px)';this.style.boxShadow='0 4px 14px rgba(16,185,129,.2)'"
+            onmouseout="this.style.borderColor='';this.style.color='';this.style.transform='';this.style.boxShadow=''">
+            More roles coming? 🚀</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════ FOOTER ══════════ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+            <div
+              style="width:36px;height:36px;background:var(--gradient-primary);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;">
+              🎯</div>
+            <span
+              style="font-family:var(--font-display);font-weight:800;font-size:1.1rem;background:var(--gradient-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">SkillMatch
+              AI</span>
+          </div>
+          <div class="footer-brand-desc">AI-powered career readiness platform helping students and freshers land their
+            dream tech jobs through intelligent skill analysis.</div>
+          <div class="footer-social" style="margin-top:20px;">
+            <a href="#" class="footer-social-btn">𝕏</a>
+            <a href="#" class="footer-social-btn">in</a>
+            <a href="#" class="footer-social-btn" title="Instagram">⑬</a>
+            <a href="#" class="footer-social-btn">▶</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-col-title">Platform</div>
+          <a href="roles.html" class="footer-link">Explore Roles</a>
+          <a href="skills.html" class="footer-link">Skill Input</a>
+          <a href="results.html" class="footer-link">Results</a>
+        </div>
+        <div>
+          <div class="footer-col-title">Resources</div>
+          <a href="#" class="footer-link">Career Blog</a>
+          <a href="#" class="footer-link">Resume Tips</a>
+          <a href="#" class="footer-link">Interview Prep</a>
+          <a href="#" class="footer-link">Learning Paths</a>
+        </div>
+        <div>
+          <div class="footer-col-title">Company</div>
+          <a href="#" class="footer-link">About Us</a>
+          <a href="#" class="footer-link">Privacy Policy</a>
+          <a href="#" class="footer-link">Terms of Service</a>
+          <a href="#contact" class="footer-link">Contact Us</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-copy">© 2026 Skill Match. All rights reserved. Made with ❤️ for students.</div>
+        <div style="display:flex; align-items:center; gap:16px;">
+
+          <a href="admin.html"
+            style="font-size: 1.2rem; text-decoration: none; color: rgba(255,255,255,0.3); transition: transform 0.3s, color 0.3s;"
+            onmouseover="this.style.color='#D4A017'; this.style.transform='scale(1.2)'"
+            onmouseout="this.style.color='rgba(255,255,255,0.3)'; this.style.transform='scale(1)'"
+            title="Admin Dashboard">⭐</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="app.js?v=2"></script>
+  <script>
+    /* ── Contact Form ── */
+    function submitContact(e) {
+      e.preventDefault();
+      const name = document.getElementById('ctName').value.trim();
+      const email = document.getElementById('ctEmail').value.trim();
+      const message = document.getElementById('ctMessage').value.trim();
+      const subject = document.getElementById('ctSubject').value;
+      const errEl = document.getElementById('ctError');
+      const sucEl = document.getElementById('ctSuccess');
+      const btn = document.getElementById('ctSubmitBtn');
+      const btnIcon = document.getElementById('ctBtnIcon');
+      const btnText = document.getElementById('ctBtnText');
+
+      // Validate
+      const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      if (!name || !emailOk || !message) {
+        errEl.style.display = 'block';
+        sucEl.style.display = 'none';
+        // Shake animation on fields
+        ['ctName', 'ctEmail', 'ctMessage'].forEach(id => {
+          const el = document.getElementById(id);
+          if (!el.value.trim() || (id === 'ctEmail' && !emailOk)) {
+            el.classList.add('error');
+            el.style.animation = 'none';
+            el.style.borderColor = 'var(--danger)';
+            setTimeout(() => { el.classList.remove('error'); el.style.borderColor = ''; }, 2000);
+          }
+        });
+        return;
+      }
+
+      errEl.style.display = 'none';
+
+      // Loading state
+      btn.disabled = true;
+      btnIcon.textContent = '⏳';
+      btnText.textContent = 'Preparing...';
+      btn.style.opacity = '.85';
+
+      const phone = "918839202850";
+      const whatsappMessage = `Hello team skill Match this is:
+*Name:* ${name}
+*Email:* ${email}
+*Topic:* ${subject || 'Not specified'}
+*Message:* ${message}`;
+
+      const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(whatsappMessage)}`;
+      window.open(whatsappUrl, '_blank');
+
+      // Update UI
+      setTimeout(() => {
+        btnIcon.textContent = '✅';
+        btnText.textContent = 'Redirected!';
+        btn.style.background = 'linear-gradient(135deg,#10b981,#06b6d4)';
+        sucEl.textContent = '🎉 Redirecting to WhatsApp...';
+        sucEl.style.display = 'block';
+        sucEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        document.getElementById('contactForm').reset();
+        document.getElementById('charCount').textContent = '0 / 1000';
+
+        setTimeout(() => {
+          btn.disabled = false;
+          btnIcon.textContent = '📨';
+          btnText.textContent = 'Send Message';
+          btn.style.background = '';
+          btn.style.opacity = '';
+          sucEl.style.display = 'none';
+        }, 5000);
+      }, 500);
+    }
+  </script>
+</body>
+
+</html>
