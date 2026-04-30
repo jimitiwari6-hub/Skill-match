@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Success Stories - Skill Match</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body { background: var(--bg-body); color: var(--text-primary); font-family: var(--font-body); margin:0; }
+    .reviews-header {
+      text-align: center;
+      padding: 80px 20px 40px;
+      background: linear-gradient(180deg, rgba(99,102,241,0.05) 0%, transparent 100%);
+    }
+    .reviews-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px 40px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 30px;
+    }
+    .back-btn {
+      position: absolute;
+      top: 30px;
+      left: 30px;
+      text-decoration: none;
+      color: var(--text-primary);
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      transition: all 0.3s ease;
+    }
+    .back-btn:hover { 
+      color: var(--primary); 
+      border-color: var(--primary);
+      transform: translateX(-5px);
+    }
+  </style>
+</head>
+<body data-theme="dark">
+  <a href="index.html" class="back-btn">← Back to Home</a>
+  
+  <div class="reviews-header">
+    <div class="section-label">Wall of Fame</div>
+    <h1 class="section-title"><span class="text-gradient">Reviews</span></h1>
+    <p style="color: var(--text-muted); max-width: 600px; margin: 20px auto; line-height: 1.6; font-size:1.1rem;">
+      See how Skill Match has transformed careers and helped thousands bridge the gap between academia and the industry.
+    </p>
+  </div>
+
+  <div class="reviews-container">
+    <!-- Review 1 -->
+    <div class="testimonial-card">
+      <div class="testimonial-stars">★★★★★</div>
+      <div class="testimonial-text">"Skill Match showed me exactly what I was missing for a Data Science role. Within 3 months of following the roadmap, I landed my first internship at a top MNC!"</div>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar" style="background:var(--grad-sunshine); color: #000;">RK</div>
+        <div>
+          <div class="testimonial-name">Rahul Kumar</div>
+          <div class="testimonial-role">Data Science Intern @ TCS</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Review 2 -->
+    <div class="testimonial-card">
+      <div class="testimonial-stars">★★★★★</div>
+      <div class="testimonial-text">"As a career switcher from mechanical engineering, I was lost. Skill Match gave me a clear Software Dev roadmap and I went from 45% to 89% match score in 4 months."</div>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar" style="background:var(--grad-lavender);">PS</div>
+        <div>
+          <div class="testimonial-name">Priya Sharma</div>
+          <div class="testimonial-role">SDE-1 @ Infosys</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Review 3 -->
+    <div class="testimonial-card">
+      <div class="testimonial-stars">★★★★★</div>
+      <div class="testimonial-text">"The detailed skill gap analysis is an eye-opener. I stopped wasting time on random tutorials and focused exactly on what the industry demanded."</div>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar" style="background:var(--grad-ocean);">AM</div>
+        <div>
+          <div class="testimonial-name">Arjun Mehta</div>
+          <div class="testimonial-role">Frontend Engineer</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Review 4 -->
+    <div class="testimonial-card">
+      <div class="testimonial-stars">★★★★★</div>
+      <div class="testimonial-text">"I always wanted to get into Cybersecurity but didn't know the exact certifications to pursue. The tailored roadmap provided by the platform got me my first junior security role!"</div>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar" style="background:var(--grad-berry);">NK</div>
+        <div>
+          <div class="testimonial-name">Neha Kapoor</div>
+          <div class="testimonial-role">Security Analyst</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Review 5 -->
+    <div class="testimonial-card">
+      <div class="testimonial-stars">★★★★★</div>
+      <div class="testimonial-text">"The AI-powered skill extraction is so accurate! It automatically detected my weaknesses in cloud infrastructure and guided me to get AWS certified. Game changer."</div>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar" style="background:var(--grad-sunset);">VS</div>
+        <div>
+          <div class="testimonial-name">Vikram Singh</div>
+          <div class="testimonial-role">Cloud Architect</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Review 6 -->
+    <div class="testimonial-card">
+      <div class="testimonial-stars">★★★★★</div>
+      <div class="testimonial-text">"I used this before starting my master's degree to understand the current market trends. It helped me pick the right electives for AI/ML."</div>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar" style="background:var(--grad-ocean); color:#fff;">ST</div>
+        <div>
+          <div class="testimonial-name">Sneha Trivedi</div>
+          <div class="testimonial-role">AI Researcher</div>
+        </div>
+      </div>
+    </div>
+    <!-- Review 7 -->
+    <div class="testimonial-card">
+      <div class="testimonial-stars">★★★★★</div>
+      <div class="testimonial-text">"Coming from a Tier-3 college, I struggled to figure out what skills top product companies actually wanted. The gap analysis showed me I lacked System Design knowledge. I focused on that, and it paid off immediately!"</div>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar" style="background:var(--grad-lavender); color:#fff;">KD</div>
+        <div>
+          <div class="testimonial-name">Karan Desai</div>
+          <div class="testimonial-role">Backend Developer @ Swiggy</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Review 8 -->
+    <div class="testimonial-card">
+      <div class="testimonial-stars">★★★★☆</div>
+      <div class="testimonial-text">"I was trying to transition into UI/UX Design from a marketing background but kept failing interviews. Skill Match pointed out my lack of wireframing and Figma auto-layout skills. Super helpful platform."</div>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar" style="background:var(--grad-sunset); color:#fff;">MT</div>
+        <div>
+          <div class="testimonial-name">Meera Thomas</div>
+          <div class="testimonial-role">Product Designer</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Review 9 -->
+    <div class="testimonial-card">
+      <div class="testimonial-stars">★★★★★</div>
+      <div class="testimonial-text">"I had a 2-year career gap due to health reasons and was nervous about re-entering the workforce. The learning roadmap gave me a structured way to catch up on React and modern JS features. I just got hired!"</div>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar" style="background:var(--grad-berry); color:#fff;">AS</div>
+        <div>
+          <div class="testimonial-name">Anjali Singh</div>
+          <div class="testimonial-role">Frontend React Developer</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Review 10 -->
+    <div class="testimonial-card">
+      <div class="testimonial-stars">★★★★★</div>
+      <div class="testimonial-text">"The best part about this tool is the tailored resources. It doesn't just tell you what you're missing, it actually gives you the exact Youtube tutorials and documentation links you need to fix it."</div>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar" style="background:var(--grad-sunshine); color:#000;">PJ</div>
+        <div>
+          <div class="testimonial-name">Praveen Joshi</div>
+          <div class="testimonial-role">DevOps Engineer</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div style="text-align: center; padding: 60px 0;">
+    <p style="color: var(--text-muted); font-size: 0.9rem;">More success stories coming soon...</p>
+  </div>
+</body>
+</html>
