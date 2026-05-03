@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Explore Roles — Skill Match</title>
+  content="Browse 35+ in-demand job roles across Tech, Healthcare, Finance, Engineering, Law and more. Start your skill
+  analysis on Skill Match." />
+  <link rel="stylesheet" href="styles.css?v=3" />
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>" />
+  <style>
+    .category-label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: var(--text-primary);
+      margin: 40px 0 18px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--border);
+      position: relative;
+    }
+
+    .category-label::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 80px;
+      height: 2px;
+      border-radius: 2px;
+    }
+
+    .cat-tech::after {
+      background: linear-gradient(90deg, #6366f1, #a855f7);
+    }
+
+    .cat-data::after {
+      background: linear-gradient(90deg, #10b981, #06b6d4);
+    }
+
+    .cat-infra::after {
+      background: linear-gradient(90deg, #f59e0b, #ef4444);
+    }
+
+    .cat-design::after {
+      background: linear-gradient(90deg, #a855f7, #ec4899);
+    }
+
+    .cat-business::after {
+      background: linear-gradient(90deg, #06b6d4, #6366f1);
+    }
+
+    .cat-health::after {
+      background: linear-gradient(90deg, #ef4444, #f97316);
+    }
+
+    .cat-finance::after {
+      background: linear-gradient(90deg, #10b981, #f59e0b);
+    }
+
+    .cat-coreeng::after {
+      background: linear-gradient(90deg, #64748b, #334155);
+    }
+
+    .cat-lawhr::after {
+      background: linear-gradient(90deg, #8b5cf6, #ec4899);
+    }
+
+    .cat-science::after {
+      background: linear-gradient(90deg, #22c55e, #14b8a6);
+    }
+
+    .cat-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .roles-grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    @media(max-width:1100px) {
+      .roles-grid-4 {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media(max-width:768px) {
+      .roles-grid-4 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media(max-width:480px) {
+      .roles-grid-4 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .role-card-sm {
+      background: var(--bg-card);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 24px 20px;
+      cursor: pointer;
+      transition: transform .35s var(--t-bounce), box-shadow .35s ease, border-color .25s ease;
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    .role-card-sm:hover {
+      transform: translateY(-8px) scale(1.02);
+    }
+
+    .role-card-sm.selected {
+      border-width: 2px;
+    }
+
+    .role-card-sm.selected::after {
+      content: '✓';
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--grad-mint);
+      color: #fff;
+      font-size: .65rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: bounceIn .4s cubic-bezier(.34, 1.56, .64, 1);
+    }
+
+    .role-card-sm .role-icon-wrap {
+      width: 60px;
+      height: 60px;
+      border-radius: var(--radius);
+      margin: 0 auto 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      transition: var(--t-bounce);
+    }
+
+    .role-card-sm:hover .role-icon-wrap {
+      transform: scale(1.18) rotate(-6deg);
+    }
+
+    .role-card-sm .role-title {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1rem;
+      margin-bottom: 7px;
+    }
+
+    .role-card-sm .role-desc {
+      font-size: .8rem;
+      color: var(--text-secondary);
+      line-height: 1.55;
+      margin-bottom: 14px;
+    }
+
+    .role-card-sm .role-tags {
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .role-card-sm .role-tag {
+      padding: 2px 9px;
+      border-radius: var(--radius-full);
+      background: var(--surface);
+      font-size: .7rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      transition: var(--t);
+    }
+
+    .role-card-sm:hover .role-tag {
+      background: rgba(99, 102, 241, .1);
+      color: var(--primary);
+    }
+
+    /* Salary pill */
+    .salary-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: .7rem;
+      font-weight: 700;
+      color: var(--success);
+      background: rgba(16, 185, 129, .1);
+      border: 1px solid rgba(16, 185, 129, .2);
+      padding: 2px 9px;
+      border-radius: var(--radius-full);
+      margin-top: 10px;
+    }
+
+    /* Filter tabs */
+    .filter-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+      justify-content: center;
+    }
+
+    .filter-tab {
+      padding: 7px 18px;
+      border-radius: var(--radius-full);
+      border: 1.5px solid var(--border);
+      font-size: .84rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      background: var(--bg-card);
+      cursor: pointer;
+      transition: var(--t-bounce);
+    }
+
+    .filter-tab:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .filter-tab.active {
+      background: var(--grad-primary);
+      background-size: 200%;
+      color: #fff;
+      border-color: transparent;
+      animation: gradientMove 3s ease infinite;
+      box-shadow: 0 4px 14px rgba(99, 102, 241, .3);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <div class="logo-icon">🎯</div>
+        <span>Skill Match</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="roles.html" class="nav-link active">Explore Roles</a>
+        <a href="courses.html" class="nav-link">Courses</a>
+      </div>
+      <div class="nav-actions">
+        <button class="btn-dark-mode" id="themeToggle" title="Toggle dark mode">🌙</button>
+        <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html" class="mobile-nav-link">🏠 Home</a>
+    <a href="roles.html" class="mobile-nav-link">💼 Explore Roles</a>
+    <a href="courses.html" class="mobile-nav-link">📚 Courses</a>
+  </div>
+
+  <main class="roles-page">
+    <div class="container">
+
+      <!-- Step Indicator -->
+      <div class="step-indicator">
+        <div class="step active">
+          <div class="step-wrapper">
+            <div class="step-circle">1</div>
+            <div class="step-label">Select Role</div>
+          </div>
+        </div>
+        <div class="step-line"></div>
+        <div class="step">
+          <div class="step-wrapper">
+            <div class="step-circle">2</div>
+            <div class="step-label">Add Skills</div>
+          </div>
+        </div>
+        <div class="step-line"></div>
+        <div class="step">
+          <div class="step-wrapper">
+            <div class="step-circle">3</div>
+            <div class="step-label">Get Results</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Header -->
+      <div class="text-center" style="margin-bottom:36px;">
+        <h1 class="section-title animate-fade-up">Explore <span class="text-gradient">35+ Job Roles</span></h1>
+        <p class="section-desc animate-fade-up animate-delay-1" style="margin:0 auto;">Across Tech, Data & AI,
+          Infrastructure, Design, and Business. Select a role to begin your skill analysis.</p>
+      </div>
+
+      <!-- Search + Filter -->
+      <div class="search-bar animate-fade-up animate-delay-2">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="roleSearch" placeholder="Search roles, e.g. 'Python', 'Design', 'Cloud'..."
+          autocomplete="off" />
+      </div>
+
+      <div class="filter-tabs animate-fade-up animate-delay-3" id="filterTabs">
+        <button class="filter-tab active" data-cat="all">🌐 All Roles</button>
+        <button class="filter-tab" data-cat="tech">💻 Tech & Dev</button>
+        <button class="filter-tab" data-cat="data">📊 Data & AI</button>
+        <button class="filter-tab" data-cat="infra">⚙️ Infrastructure</button>
+        <button class="filter-tab" data-cat="design">🎨 Design</button>
+        <button class="filter-tab" data-cat="business">💼 Business</button>
+        <button class="filter-tab" data-cat="health">Healthcare</button>
+        <button class="filter-tab" data-cat="finance"> Finance</button>
+        <button class="filter-tab" data-cat="coreeng"> Core Engg.</button>
+        <button class="filter-tab" data-cat="lawhr"> Law & HR</button>
+        <button class="filter-tab" data-cat="science">Science</button>
+      </div>
+
+      <!-- No results -->
+      <div id="noResults" style="display:none;text-align:center;padding:60px 0;">
+        <div style="font-size:3rem;margin-bottom:16px;">🔍</div>
+        <div style="font-weight:700;font-size:1.1rem;margin-bottom:8px;">No matching roles found</div>
+        <div style="color:var(--text-muted);font-size:.9rem;">Try a different search term or filter</div>
+      </div>
+
+      <!-- ═══ TECH & DEVELOPMENT ═══ -->
+      <div class="category-section" data-cat="tech">
+        <div class="category-label cat-tech">
+          <div class="cat-icon" style="background:linear-gradient(135deg,rgba(99,102,241,.15),rgba(168,85,247,.1));">💻
+          </div>
+          Tech & Development
+          <span class="badge badge-primary" style="margin-left:auto;font-size:.72rem;">8 Roles</span>
+        </div>
+        <div class="roles-grid-4">
+
+          <div class="role-card-sm" data-role="Software Developer" data-index="0" data-cat="tech"
+            onclick="selectRole(this)" tabindex="0">
+            <div class="role-icon-wrap"
+              style="background:linear-gradient(135deg,rgba(99,102,241,.18),rgba(99,102,241,.06));box-shadow:0 6px 18px rgba(99,102,241,.12);">
+              💻</div>
+            <div class="role-title">Software Developer</div>
+            <div class="role-desc">Build scalable apps with clean code using modern languages and frameworks.</div>
+            <div class="role-tags"><span class="role-tag">Python</span><span class="role-tag">DSA</span><span
+                class="role-tag">OOP</span></div>
+            <div class="salary-pill">💰 ₹8–20 LPA</div>
+          </div>
+
+          <div class="role-card-sm" data-role="Full Stack Developer" data-index="1" data-cat="tech"
+            onclick="selectRole(this)" tabindex="0">
+            <div class="role-icon-wrap"
+              style="background:linear-gradient(135deg,rgba(168,85,247,.18),rgba(168,85,247,.06));box-shadow:0 6px 18px rgba(168,85,247,.12);">
+              🌐</div>
+            <div class="role-title">Full Stack Developer</div>
+            <div class="role-desc">Work across both frontend and backend, owning the complete web application stack.
+            </div>
+            <div class="role-tags"><span class="role-tag">React</span><span class="role-tag">Node.js</span><span
+                class="role-tag">MongoDB</span></div>
+            <div class="salary-pill">💰 ₹9–22 LPA</div>
+          </div>
+
+          <div class="role-card-sm" data-role="Mobile App Developer" data-index="2" data-cat="tech"
+            onclick="selectRole(this)" tabindex="0">
+            <div class="role-icon-wrap"
+              style="background:linear-gradient(135deg,rgba(236,72,153,.18),rgba(236,72,153,.06));box-shadow:0 6px 18px rgba(236,72,153,.12);">
+              📱</div>
+            <div class="role-title">Mobile App Developer</div>
+            <div class="role-desc">Create native or cross-platform mobile apps for iOS and Android platforms.</div>
+            <div class="role-tags"><span class="role-tag">Flutter</span><span class="role-tag">React Native</span><span
+                class="role-tag">Swift</span></div>
+            <div class="salary-pill">💰 ₹8–20 LPA</div>
+          </div>
+
+          <div class="role-card-sm" data-role="Blockchain Developer" data-index="3" data-cat="tech"
+            onclick="selectRole(this)" tabindex="0">
+            <div class="role-icon-wrap"
+              style="background:linear-gradient(135deg,rgba(245,158,11,.18),rgba(245,158,11,.06));box-shadow:0 6px 18px rgba(245,158,11,.12);">
+              ⛓️</div>
+            <div class="role-title">Blockchain Developer</div>
+            <div class="role-desc">Build decentralized apps, smart contracts, and Web3 solutions on blockchain
+              platforms.</div>
+            <div class="role-tags"><span class="role-tag">Solidity</span><span class="role-tag">Ethereum</span><span
+                class="role-tag">Web3</span></div>
+            <div class="salary-pill">💰 ₹12–35 LPA</div>
+          </div>
+
+          <div class="role-card-sm" data-role="Game Developer" data-index="4" data-cat="tech" onclick="selectRole(this)"
+            tabindex="0">
+            <div class="role-icon-wrap"
+              style="background:linear-gradient(135deg,rgba(16,185,129,.18),rgba(16,185,129,.06));box-shadow:0 6px 18px rgba(16,185,129,.12);">
+              🎮</div>
+            <div class="role-title">Game Developer</div>
+            <div class="role-desc">Design and develop interactive games for PC, console, or mobile platforms.</div>
+            <div class="role-tags"><span class="role-tag">Unity</span><span class="role-tag">C#</span><span
+                class="role-tag">3D Math</span></div>
+            <div class="salary-pill">💰 ₹7–18 LPA</div>
+          </div>
+
+          <div class="role-card-sm" data-role="Machine Learning Engineer" data-index="5" data-cat="tech"
+            onclick="selectRole(this)" tabindex="0">
+            <div class="role-icon-wrap"
+              style="background:linear-gradient(135deg,rgba(6,182,212,.18),rgba(6,182,212,.06));box-shadow:0 6px 18px rgba(6,182,212,.12);">
+              🤖</div>
+            <div class="role-title">ML Engineer</div>
+            <div class="role-desc">Deploy ML models to production, build pipelines, and optimize model performance at
+              scale.</div>
+            <div class="role-tags"><span class="role-tag">PyTorch</span><span class="role-tag">MLOps</span><span
+                class="role-tag">Docker</span></div>
+            <div class="salary-pill">💰 ₹15–40 LPA</div>
+          </div>
+
+          <div class="role-card-sm" data-role="QA Engineer" data-index="32" data-cat="tech" onclick="selectRole(this)"
+            tabindex="0">
+            <div class="role-icon-wrap"
+              style="background:linear-gradient(135deg,rgba(99,102,241,.18),rgba(168,85,247,.06));box-shadow:0 6px 18px rgba(99,102,241,.12);">
+              🧪</div>
+            <div class="role-title">QA Engineer</div>
+            <div class="role-desc">Ensure software quality through manual and automated testing processes.</div>
+            <div class="role-tags"><span class="role-tag">Selenium</span><span class="role-tag">Cypress</span><span
+                class="role-tag">Testing</span></div>
+            <div class="salary-pill">💰 ₹6–18 LPA</div>
+          </div>
+
+          <div class="role-card-sm" data-role="Technical Writer" data-index="33" data-cat="tech"
+            onclick="selectRole(this)" tabindex="0">
+            <div class="role-icon-wrap"
+              style="background:linear-gradient(135deg,rgba(236,72,153,.18),rgba(245,158,11,.06));box-shadow:0 6px 18px rgba(236,72,153,.12);">
+              ✍️</div>
+            <div class="role-title">Technical Writer</div>
+            <div class="role-desc">Create clear, concise documentation, API guides, and tutorials for developers and
+              users.</div>
+            <div class="role-tags"><span class="role-tag">Markdown</span><span class="role-tag">API Docs</span><span
+                class="role-tag">Git</span></div>
+            <div class="salary-pill">💰 ₹5–15 LPA</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ═══ DATA & AI ═══ -->
+      <div class="category-section" data-cat="data">
+        <div class="category-label cat-data">
+          <div class="cat-icon" style="background:linear-gradient(135deg,rgba(16,185,129,.15),rgba(6,182,212,.1));">📊
+          </div>
+          Data & AI
+          <span class="badge badge-success" style="margin-left:auto;font-size:.72rem;">4 Roles</span>
+        </div>
+        <div class="roles-grid-4">
+
+          <div class="role-card-sm" data-role="Data Scientist" data-index="6" data-cat="data" onclick="selectRole(this)"
+            tabindex="0">
+            <div class="role-icon-wrap"
+              style="background:linear-gradient(135deg,rgba(16,185,129,.18),rgba(16,185,129,.06));box-shadow:0 6px 18px rgba(16,185,129,.12);">
+              📊</div>
+            <div class="role-title">Data Scientist</div>
+            <div class="role-desc">Analyze large datasets, build predictive models, and extract business insights.</div>
+            <div class="role-tags"><span class="role-tag">Python</span><span class="role-tag">ML</span><span
+                class="role-tag">Statistics</span></div>
+            <div class="salary-pill">💰 ₹10–25 LPA</div>
+          </div>
+
+          <div class="role-card-sm" data-role="Data Analyst" data-index="7" data-cat="data" onclick="selectRole(this)"
+            tabindex="0">
+            <div class="role-icon-wrap"
+              style="background:linear-gradient(135deg,rgba(6,182,212,.18),rgba(6,182,212,.06));box-shadow:0 6px 18px rgba(6,182,212,.12);">
+              📈</div>
+            <div class="role-title">Data Analyst</div>
+            <div class="role-desc">Transform raw data into meaningful business insights through reporting and
+              visualizations.</div>
+            <div class="role-tags"><span class="role-tag">SQL</span><span class="role-tag">Excel</span><span
+                class="role-tag">Tableau</span></div>
+            <div class="salary-pill">💰 ₹6–15 LPA</div>
+          </div>
+
+          <div class="role-card-sm" data-role="AI Research Scientist" data-index="8" data-cat="data"
+            onclick="selectRole(this)" tabindex="0">
+            <div class="role-icon-wrap"
+              style="background:linear-gradient(135deg,rgba(99,102,241,.18),rgba(168,85,247,.06));box-shadow:0 6px 18px rgba(99,102,241,.12);">
+              🧠</div>
+            <div class="role-title">AI Research Scientist</div>
+            <div class="role-desc">Conduct cutting-edge AI research, publish papers, and advance the state of deep
+              learning.</div>
+            <div class="role-tags"><span class="role-tag">Deep Learning</span><span class="role-tag">NLP</span><span
+                class="role-tag">Research</span></div>
+            <div class="salary-pill">💰 ₹20–60 LPA</div>
+          </div>
+
+          <div class="role-card-sm" data-role="Data Engineer" data-index="34" data-cat="data" onclick="selectRole(this)"
+            tabindex="0">
+            <div class="role-icon-wrap"
+              style="background:linear-gradient(135deg,rgba(16,185,129,.18),rgba(6,182,212,.06));box-shadow:0 6px 18px rgba(16,185,129,.12);">
+              ⚙️</div>
+            <div class="role-title">Data Engineer</div>
+            <div class="role-desc">Build scalable data pipelines, manage data warehouses, and optimize big data systems.
+            </div>
+            <div class="role-tags"><span class="role-tag">SQL</span><span class="role-tag">Python</span><span
+                class="role-tag">Spark</span></div>
+            <div class="salary-pill">💰 ₹12–30 LPA</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ═══ INFRASTRUCTURE ═══ -->
+      <div class="category-section" data-cat="infra">
+        <div class="category-label cat-infra">
+          <div class="cat-icon" style="background:linear-gradient(135deg,rgba(245,158,11,.15),rgba(239,68,68,.1));">⚙️
+          </div>
+          Infrastructure & Security
+          <span class="badge badge-warning" style="margin-left:auto;font-size:.72rem;">4 Roles</span>
+        </div>
+        <div class="roles-grid-4">
+
+          <div class="role-card-sm" data-role="Cloud Engineer" data-index="9" data-cat="infra"
+            onclick="selectRole(this)" tabindex="0">
+            <div class="role-icon-wrap"
+              style="background:linear-gradient(135deg,rgba(245,158,11,.18),rgba(245,158,11,.06));box-shadow:0 6px 18px rgba(245,158,11,.12);">
+              ☁️</div>
+            <div class="role-title">Cloud Engineer</div>
+            <div class="role-desc">Design, deploy, and manage scalable cloud infrastructure across AWS, Azure, or GCP.
+            </div>
+            <div class="role-tags"><span class="role-tag">AWS</span><span class="role-tag">Docker</span><span
+                class="role-tag">Kubernetes</span></div>
+            <div class="salary-pill">💰 ₹10–28 LPA</div>
+          </div>
+
+          <div class="role-card-sm" data-role="DevOps Engineer" data-index="10" data-cat="infra"
+            onclick="selectRole(this)" tabindex="0">
+            <div class="role-icon-wrap"
+              style="background:linear-gradient(135deg,rgba(239,68,68,.18),rgba(239,68,68,.06));box-shadow:0 6px 18px rgba(239,68,68,.12);">
+              🔄</div>
+            <div class="role-title">DevOps Engineer</div>
+            <div class="role-desc">Bridge dev and ops by automating CI/CD pipelines and ensuring seamless delivery.
+            </div>
+            <div class="role-tags"><span class="role-tag">Jenkins</span><span class="role-tag">Docker</span><span
+                class="role-tag">Linux</span></div>
+            <div class="salary-pill">💰 ₹9–22 LPA</div>
+          </div>
+
+          <div class="role-card-sm" data-role="Cybersecurity Analyst" data-index="11" data-cat="infra"
+            onclick="selectRole(this)" tabindex="0">
+            <div class="role-icon-wrap"
+              style="background:linear-gradient(135deg,rgba(6,182,212,.18),rgba(6,182,212,.06));box-shadow:0 6px 18px rgba(6,182,212,.12);">
+              🔐</div>
+            <div class="role-title">Cybersecurity Analyst</div>
+            <div class="role-desc">Protect systems from threats, conduct security audits, and implement defense
+              strategies.</div>
+            <div class="role-tags"><span class="role-tag">Networking</span><span class="role-tag">Linux</span><span
+                class="role-tag">Ethical Hacking</span></div>
+            <div class="salary-pill">💰 ₹7–18 LPA</div>
+          </div>
+
+          <div class="role-card-sm" data-role="Site Reliability Engineer" data-index="12" data-cat="infra"
+            onclick="selectRole(this)" tabindex="0">
+            <div class="role-icon-wrap"
+              style="background:linear-gradient(135deg,rgba(249,115,22,.18),rgba(249,115,22,.06));box-shadow:0 6px 18px rgba(249,115,22,.12);">
+              🛡️</div>
+            <div class="role-title">Site Reliability Engineer</div>
+            <div class="role-desc">Ensure reliability, scalability, and performance of large-scale production systems.
+            </div>
+            <div class="role-tags"><span class="role-tag">SLOs</span><span class="role-tag">Prometheus</span><span
+                class="role-tag">Go</span></div>
+            <div class="salary-pill">💰 ₹15–35 LPA</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ═══ DESIGN & CREATIVE ═══ -->
+      <div class="category-section" data-cat="design">
+        <div class="category-label cat-design">
+          <div class="cat-icon" style="background:linear-gradient(135deg,rgba(168,85,247,.15),rgba(236,72,153,.1));">🎨
+          </div>
+          Design & Creative
+          <span class="badge badge-purple" style="margin-left:auto;font-size:.72rem;">3 Roles</span>
+        </div>
+        <div class="roles-grid-4">
+
+          <div class="role-card-sm" data-role="UI/UX Designer" data-index="13" data-cat="design"
+            onclick="selectRole(this)" tabindex="0">
+            <div class="role-icon-wrap"
+              style="background:linear-gradient(135deg,rgba(168,85,247,.18),rgba(168,85,247,.06));box-shadow:0 6px 18px rgba(168,85,247,.12);">
+              🎨</div>
+            <div class="role-title">UI/UX Designer</div>
+            <div class="role-desc">Craft intuitive interfaces and delightful experiences balancing aesthetics with
+              usability.</div>
+            <div class="role-tags"><span class="role-tag">Figma</span><span class="role-tag">Wireframing</span><span
+                class="role-tag">UX Research</span></div>
+            <div class="salary-pill">💰 ₹6–15 LPA</div>
+          </div>
+
+          <div class="role-card-sm" data-role="Graphic Designer" data-index="14" data-cat="design"
+            onclick="selectRole(this)" tabindex="0">
+            <div class="role-icon-wrap"
+              style="background:linear-gradient(135deg,rgba(236,72,153,.18),rgba(236,72,153,.06));box-shadow:0 6px 18px rgba(236,72,153,.12);">
+              🖌️</div>
+            <div class="role-title">Graphic Designer</div>
+            <div class="role-desc">Create visual content — logos, branding, illustrations, and marketing materials.
+            </div>
+            <div class="role-tags"><span class="role-tag">Photoshop</span><span class="role-tag">Illustrator</span><span
+                class="role-tag">Branding</span></div>
+            <div class="salary-pill">💰 ₹4–12 LPA</div>
+          </div>
+
+          <div class="role-card-sm" data-role="Video Editor" data-index="15" data-cat="design"
+            onclick="selectRole(this)" tabindex="0">
+            <div class="role-icon-wrap"
+              style="background:linear-gradient(135deg,rgba(239,68,68,.18),rgba(239,68,68,.06));box-shadow:0 6px 18px rgba(239,68,68,.12);">
+              🎬</div>
+            <div class="role-title">Video Editor</div>
+            <div class="role-desc">Edit, color grade, and produce professional video content for social media and film.
+            </div>
+            <div class="role-tags"><span class="role-tag">Premiere Pro</span><span class="role-tag">After
+                Effects</span><span class="role-tag">DaVinci</span></div>
+            <div class="salary-pill">💰 ₹4–14 LPA</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ═══ BUSINESS ═══ -->
+      <div class="category-section" data-cat="business">
+        <div class="category-label cat-business">
+          <div class="cat-icon" style="background:linear-gradient(135deg,rgba(6,182,212,.15),rgba(99,102,241,.1));">💼
+          </div>
+          Business & Marketing
+          <span class="badge badge-cyan" style="margin-left:auto;font-size:.72rem;">2 Roles</span>
+        </div>
+        <div class="roles-grid-4">
+
+          <div class="role-card-sm" data-role="Product Manager" data-index="16" data-cat="business"
+            onclick="selectRole(this)" tabindex="0">
+            <div class="role-icon-wrap"
+              style="background:linear-gradient(135deg,rgba(6,182,212,.18),rgba(6,182,212,.06));box-shadow:0 6px 18px rgba(6,182,212,.12);">
+              📋</div>
+            <div class="role-title">Product Manager</div>
+            <div class="role-desc">Define product vision, roadmap, and strategy while bridging business and engineering
+              teams.</div>
+            <div class="role-tags"><span class="role-tag">Roadmapping</span><span class="role-tag">Agile</span><span
+                class="role-tag">Analytics</span></div>
+            <div class="salary-pill">💰 ₹15–40 LPA</div>
+          </div>
+
+          <div class="role-card-sm" data-role="Digital Marketing Specialist" data-index="17" data-cat="business"
+            onclick="selectRole(this)" tabindex="0">
+            <div class="role-icon-wrap"
+              style="background:linear-gradient(135deg,rgba(99,102,241,.18),rgba(99,102,241,.06));box-shadow:0 6px 18px rgba(99,102,241,.12);">
+              📣</div>
+            <div class="role-title">Digital Marketing</div>
+            <div class="role-desc">Drive online growth through SEO, paid ads, social media, email marketing, and content
+              strategy.</div>
+            <div class="role-tags"><span class="role-tag">SEO</span><span class="role-tag">Google Ads</span><span
+                class="role-tag">Analytics</span></div>
+            <div class="salary-pill">💰 ₹5–15 LPA</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ═══ HEALTHCARE & MEDICAL ═══ -->
+      <div class="category-section" data-cat="health">
+        <div class="category-label cat-health">
+          <div class="cat-icon" style="background:linear-gradient(135deg,rgba(239,68,68,.15),rgba(249,115,22,.1));">🏥
+          </div>
+          Healthcare &amp; Medical
+          <span class="badge"
+            style="margin-left:auto;font-size:.72rem;background:linear-gradient(135deg,#ef4444,#f97316);color:#fff;">4
+            Roles</span>
+        </div>
+        <div class="roles-grid-4">
+
+          <div class="role-card-sm" data-role="Doctor / Physician" data-index="18" data-cat="health"
+            onclick="selectRole(this)" tabindex="0">
+            <div class="role-icon-wrap"
+              style="background:linear-gradient(135deg,rgba(239,68,68,.18),rgba(239,68,68,.06));box-shadow:0 6px 18px rgba(239,68,68,.12);">
+              🩺</div>
+            <div class="role-title">Doctor / Physician</div>
+            <div class="role-desc">Diagnose and treat patients, prescribe medications, and manage overall health care in
+              clinical settings.</div>
+            <div class="role-tags"><span class="role-tag">Clinical Skills</span><span
+                class="role-tag">Pharmacology</span><span class="role-tag">Diagnosis</span></div>
+            <div class="salary-pill">💰 ₹8–30 LPA</div>
+          </div>
+
+          <div class="role-card-sm" data-role="Registered Nurse" data-index="19" data-cat="health"
+            onclick="selectRole(this)" tabindex="0">
+            <div class="role-icon-wrap"
+              style="background:linear-gradient(135deg,rgba(249,115,22,.18),rgba(249,115,22,.06));box-shadow:0 6px 18px rgba(249,115,22,.12);">
+              💉</div>
+            <div class="role-title">Registered Nurse</div>
+            <div class="role-desc">Provide and coordinate patient care, administer medications, and assist physicians in
+              medical procedures.</div>
+            <div class="role-tags"><span class="role-tag">Patient Care</span><span class="role-tag">Vitals</span><span
+                class="role-tag">IV Therapy</span></div>
+            <div class="salary-pill">💰 ₹4–10 LPA</div>
+          </div>
+
+          <div class="role-card-sm" data-role="Medical Lab Technician" data-index="20" data-cat="health"
+            onclick="selectRole(this)" tabindex="0">
+            <div class="role-icon-wrap"
+              style="background:linear-gradient(135deg,rgba(16,185,129,.18),rgba(16,185,129,.06));box-shadow:0 6px 18px rgba(16,185,129,.12);">
+              🔬</div>
+            <div class="role-title">Medical Lab Technician</div>
+            <div class="role-desc">Perform laboratory tests on blood, tissue, and body fluids to help physicians
+              diagnose diseases.</div>
+            <div class="role-tags"><span class="role-tag">Microbiology</span><span
+                class="role-tag">Pathology</span><span class="role-tag">Lab Equipment</span></div>
+            <div class="salary-pill">💰 ₹3–8 LPA</div>
+          </div>
+
+          <div class="role-card-sm" data-role="Pharmacist" data-index="21" data-cat="health" onclick="selectRole(this)"
+            tabindex="0">
+            <div class="role-icon-wrap"
+              style="background:linear-gradient(135deg,rgba(99,102,241,.18),rgba(99,102,241,.06));box-shadow:0 6px 18px rgba(99,102,241,.12);">
+              💊</div>
+            <div class="role-title">Pharmacist</div>
+            <div class="role-desc">Dispense medications, counsel patients on drug use, and ensure the safe use of
+              prescriptions.</div>
+            <div class="role-tags"><span class="role-tag">Pharmaceutical Chemistry</span><span class="role-tag">Drug
+                Interactions</span><span class="role-tag">Dispensing</span></div>
+            <div class="salary-pill">💰 ₹4–12 LPA</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ═══ FINANCE & ACCOUNTING ═══ -->
+      <div class="category-section" data-cat="finance">
+        <div class="category-label cat-finance">
+          <div class="cat-icon" style="background:linear-gradient(135deg,rgba(16,185,129,.15),rgba(245,158,11,.1));">💹
+          </div>
+          Finance &amp; Accounting
+          <span class="badge"
+            style="margin-left:auto;font-size:.72rem;background:linear-gradient(135deg,#10b981,#f59e0b);color:#fff;">3
+            Roles</span>
+        </div>
+        <div class="roles-grid-4">
+
+          <div class="role-card-sm" data-role="Chartered Accountant" data-index="22" data-cat="finance"
+            onclick="selectRole(this)" tabindex="0">
+            <div class="role-icon-wrap"
+              style="background:linear-gradient(135deg,rgba(16,185,129,.18),rgba(16,185,129,.06));box-shadow:0 6px 18px rgba(16,185,129,.12);">
+              📒</div>
+            <div class="role-title">Chartered Accountant</div>
+            <div class="role-desc">Manage financial records, tax compliance, auditing, and provide strategic financial
+              advice to businesses.</div>
+            <div class="role-tags"><span class="role-tag">Taxation</span><span class="role-tag">Auditing</span><span
+                class="role-tag">GST</span></div>
+            <div class="salary-pill">💰 ₹8–30 LPA</div>
+          </div>
+
+          <div class="role-card-sm" data-role="Financial Analyst" data-index="23" data-cat="finance"
+            onclick="selectRole(this)" tabindex="0">
+            <div class="role-icon-wrap"
+              style="background:linear-gradient(135deg,rgba(245,158,11,.18),rgba(245,158,11,.06));box-shadow:0 6px 18px rgba(245,158,11,.12);">
+              💹</div>
+            <div class="role-title">Financial Analyst</div>
+            <div class="role-desc">Analyze financial data, create models, assess investments, and guide business
+              financial decisions.</div>
+            <div class="role-tags"><span class="role-tag">Financial Modeling</span><span
+                class="role-tag">Excel</span><span class="role-tag">Valuation</span></div>
+            <div class="salary-pill">💰 ₹6–18 LPA</div>
+          </div>
+
+          <div class="role-card-sm" data-role="Investment Banker" data-index="24" data-cat="finance"
+            onclick="selectRole(this)" tabindex="0">
+            <div class="role-icon-wrap"
+              style="background:linear-gradient(135deg,rgba(99,102,241,.18),rgba(99,102,241,.06));box-shadow:0 6px 18px rgba(99,102,241,.12);">
+              🏦</div>
+            <div class="role-title">Investment Banker</div>
+            <div class="role-desc">Facilitate M&amp;A deals, raise capital, value companies, and advise large
+              corporations on financial strategies.</div>
+            <div class="role-tags"><span class="role-tag">M&amp;A</span><span class="role-tag">Valuation</span><span
+                class="role-tag">Capital Markets</span></div>
+            <div class="salary-pill">💰 ₹12–50 LPA</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ═══ CORE ENGINEERING ═══ -->
+      <div class="category-section" data-cat="coreeng">
+        <div class="category-label cat-coreeng">
+          <div class="cat-icon" style="background:linear-gradient(135deg,rgba(100,116,139,.15),rgba(51,65,85,.1));">🔩
+          </div>
+          Core Engineering
+          <span class="badge"
+            style="margin-left:auto;font-size:.72rem;background:linear-gradient(135deg,#64748b,#334155);color:#fff;">3
+            Roles</span>
+        </div>
+        <div class="roles-grid-4">
+
+          <div class="role-card-sm" data-role="Civil Engineer" data-index="25" data-cat="coreeng"
+            onclick="selectRole(this)" tabindex="0">
+            <div class="role-icon-wrap"
+              style="background:linear-gradient(135deg,rgba(100,116,139,.18),rgba(100,116,139,.06));box-shadow:0 6px 18px rgba(100,116,139,.12);">
+              🏗️</div>
+            <div class="role-title">Civil Engineer</div>
+            <div class="role-desc">Design, plan, and supervise construction of infrastructure like roads, bridges, dams,
+              and buildings.</div>
+            <div class="role-tags"><span class="role-tag">AutoCAD</span><span class="role-tag">Structural
+                Analysis</span><span class="role-tag">Surveying</span></div>
+            <div class="salary-pill">💰 ₹4–15 LPA</div>
+          </div>
+
+          <div class="role-card-sm" data-role="Mechanical Engineer" data-index="26" data-cat="coreeng"
+            onclick="selectRole(this)" tabindex="0">
+            <div class="role-icon-wrap"
+              style="background:linear-gradient(135deg,rgba(51,65,85,.18),rgba(51,65,85,.06));box-shadow:0 6px 18px rgba(51,65,85,.1);">
+              ⚙️</div>
+            <div class="role-title">Mechanical Engineer</div>
+            <div class="role-desc">Design and develop mechanical systems, machinery, and manufacturing processes across
+              industries.</div>
+            <div class="role-tags"><span class="role-tag">SolidWorks</span><span
+                class="role-tag">Thermodynamics</span><span class="role-tag">CAD/CAM</span></div>
+            <div class="salary-pill">💰 ₹4–14 LPA</div>
+          </div>
+
+          <div class="role-card-sm" data-role="Electrical Engineer" data-index="27" data-cat="coreeng"
+            onclick="selectRole(this)" tabindex="0">
+            <div class="role-icon-wrap"
+              style="background:linear-gradient(135deg,rgba(245,158,11,.18),rgba(245,158,11,.06));box-shadow:0 6px 18px rgba(245,158,11,.12);">
+              🔌</div>
+            <div class="role-title">Electrical Engineer</div>
+            <div class="role-desc">Design electrical systems, power distribution networks, and electronic circuits for
+              industrial applications.</div>
+            <div class="role-tags"><span class="role-tag">Circuit Design</span><span class="role-tag">PLC</span><span
+                class="role-tag">Power Systems</span></div>
+            <div class="salary-pill">💰 ₹4–16 LPA</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ═══ LAW & HR ═══ -->
+      <div class="category-section" data-cat="lawhr">
+        <div class="category-label cat-lawhr">
+          <div class="cat-icon" style="background:linear-gradient(135deg,rgba(139,92,246,.15),rgba(236,72,153,.1));">⚖️
+          </div>
+          Law &amp; Human Resources
+          <span class="badge"
+            style="margin-left:auto;font-size:.72rem;background:linear-gradient(135deg,#8b5cf6,#ec4899);color:#fff;">2
+            Roles</span>
+        </div>
+        <div class="roles-grid-4">
+
+          <div class="role-card-sm" data-role="Lawyer / Advocate" data-index="28" data-cat="lawhr"
+            onclick="selectRole(this)" tabindex="0">
+            <div class="role-icon-wrap"
+              style="background:linear-gradient(135deg,rgba(139,92,246,.18),rgba(139,92,246,.06));box-shadow:0 6px 18px rgba(139,92,246,.12);">
+              ⚖️</div>
+            <div class="role-title">Lawyer / Advocate</div>
+            <div class="role-desc">Represent clients in legal matters, draft contracts, and provide expert counsel on
+              laws and regulations.</div>
+            <div class="role-tags"><span class="role-tag">Contract Law</span><span class="role-tag">Legal
+                Research</span><span class="role-tag">Court Procedures</span></div>
+            <div class="salary-pill">💰 ₹5–30 LPA</div>
+          </div>
+
+          <div class="role-card-sm" data-role="HR Manager" data-index="29" data-cat="lawhr" onclick="selectRole(this)"
+            tabindex="0">
+            <div class="role-icon-wrap"
+              style="background:linear-gradient(135deg,rgba(236,72,153,.18),rgba(236,72,153,.06));box-shadow:0 6px 18px rgba(236,72,153,.12);">
+              👥</div>
+            <div class="role-title">HR Manager</div>
+            <div class="role-desc">Oversee recruitment, employee relations, training, and compliance with labor laws
+              across the organization.</div>
+            <div class="role-tags"><span class="role-tag">Recruitment</span><span class="role-tag">Labour
+                Laws</span><span class="role-tag">Payroll</span></div>
+            <div class="salary-pill">💰 ₹6–20 LPA</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ═══ SCIENCE & ENVIRONMENT ═══ -->
+      <div class="category-section" data-cat="science">
+        <div class="category-label cat-science">
+          <div class="cat-icon" style="background:linear-gradient(135deg,rgba(34,197,94,.15),rgba(20,184,166,.1));">🌱
+          </div>
+          Science &amp; Environment
+          <span class="badge"
+            style="margin-left:auto;font-size:.72rem;background:linear-gradient(135deg,#22c55e,#14b8a6);color:#fff;">2
+            Roles</span>
+        </div>
+        <div class="roles-grid-4">
+
+          <div class="role-card-sm" data-role="Agricultural Scientist" data-index="30" data-cat="science"
+            onclick="selectRole(this)" tabindex="0">
+            <div class="role-icon-wrap"
+              style="background:linear-gradient(135deg,rgba(34,197,94,.18),rgba(34,197,94,.06));box-shadow:0 6px 18px rgba(34,197,94,.12);">
+              🌾</div>
+            <div class="role-title">Agricultural Scientist</div>
+            <div class="role-desc">Research and develop techniques to improve crop yields, soil health, and sustainable
+              farming practices.</div>
+            <div class="role-tags"><span class="role-tag">Agronomy</span><span class="role-tag">Soil Science</span><span
+                class="role-tag">Crop Management</span></div>
+            <div class="salary-pill">💰 ₹4–14 LPA</div>
+          </div>
+
+          <div class="role-card-sm" data-role="Environmental Engineer" data-index="31" data-cat="science"
+            onclick="selectRole(this)" tabindex="0">
+            <div class="role-icon-wrap"
+              style="background:linear-gradient(135deg,rgba(20,184,166,.18),rgba(20,184,166,.06));box-shadow:0 6px 18px rgba(20,184,166,.12);">
+              🌿</div>
+            <div class="role-title">Environmental Engineer</div>
+            <div class="role-desc">Develop solutions for environmental problems — water treatment, waste management, and
+              pollution control.</div>
+            <div class="role-tags"><span class="role-tag">EIA</span><span class="role-tag">Water Treatment</span><span
+                class="role-tag">GIS</span></div>
+            <div class="salary-pill">💰 ₹5–16 LPA</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Role count bar -->
+      <div style="text-align:center;padding:24px 0 0;color:var(--text-muted);font-size:.85rem;" id="roleCountBar">
+        Showing all <strong style="color:var(--primary);">32 roles</strong>
+      </div>
+
+      <!-- Selected role banner -->
+      <div id="selectedRoleInfo"
+        style="display:none;margin:28px auto 20px;padding:16px 24px;background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.2);border-radius:var(--radius-md);display:flex;align-items:center;gap:14px;max-width:520px;">
+        <span id="selectedRoleEmoji" style="font-size:1.6rem;"></span>
+        <div>
+          <div
+            style="font-size:.74rem;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:.06em;">
+            Selected Role</div>
+          <div id="selectedRoleName" style="font-weight:800;font-size:1.05rem;color:var(--primary);"></div>
+        </div>
+        <button onclick="clearSelection()"
+          style="margin-left:auto;color:var(--text-muted);font-size:.8rem;padding:5px 12px;border-radius:var(--radius-full);background:var(--surface);border:1px solid var(--border);cursor:pointer;transition:var(--t);"
+          onmouseover="this.style.color='var(--danger)';this.style.borderColor='rgba(239,68,68,.3)'"
+          onmouseout="this.style.color='';this.style.borderColor=''">✕ Clear</button>
+      </div>
+
+      <div id="continueAction" style="display:none;"></div>
+      <div id="continueTip"
+        style="text-align:center;margin-bottom:30px;font-size:.85rem;color:var(--text-muted);background:var(--surface);padding:12px;border-radius:var(--radius);max-width:300px;margin-left:auto;margin-right:auto;border:1px dashed var(--border);">
+        💡 Select a role above to proceed to the next step
+      </div>
+
+    </div>
+  </main>
+
+  <div class="toast-container" id="toastContainer"></div>
+  <script src="app.js?v=2"></script>
+  <script>
+    const ROLE_EMOJIS = ['💻', '🌐', '📱', '⛓️', '🎮', '🤖', '📊', '📈', '🧠', '☁️', '🔄', '🔐', '🛡️', '🎨', '🖌️', '🎬', '📋', '📣', '🩺', '💉', '🔬', '💊', '📒', '💹', '🏦', '🏗️', '⚙️', '🔌', '⚖️', '👥', '🌾', '🌿'];
+    let selectedRoleEl = null;
+
+    function selectRole(card) {
+      document.querySelectorAll('.role-card-sm').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      selectedRoleEl = card;
+      const roleName = card.dataset.role;
+      const idx = parseInt(card.dataset.index);
+      const emoji = ROLE_EMOJIS[idx] || '💼';
+      document.getElementById('selectedRoleInfo').style.display = 'flex';
+      document.getElementById('selectedRoleName').textContent = roleName;
+      document.getElementById('selectedRoleEmoji').textContent = emoji;
+
+      // Remove continue button logic since we auto-redirect
+      document.getElementById('continueTip').style.display = 'none';
+
+      // Clear skills of last selected job role
+      sessionStorage.removeItem('userSkills');
+      sessionStorage.removeItem('currentRolePresets');
+
+      sessionStorage.setItem('selectedRole', roleName);
+      sessionStorage.setItem('selectedRoleEmoji', emoji);
+      sessionStorage.setItem('selectedRoleIndex', idx);
+      showToast(`${emoji} "${roleName}" selected! Redirecting...`, 'success');
+
+      // Auto-redirect to skills page
+      setTimeout(() => {
+        window.location.href = 'skills.html';
+      }, 500);
+    }
+
+    function clearSelection() {
+      document.querySelectorAll('.role-card-sm').forEach(c => c.classList.remove('selected'));
+      selectedRoleEl = null;
+      document.getElementById('selectedRoleInfo').style.display = 'none';
+
+      // Hide continue button
+      document.getElementById('continueAction').style.display = 'none';
+      document.getElementById('continueTip').style.display = 'block';
+
+      sessionStorage.removeItem('selectedRole');
+      sessionStorage.removeItem('userSkills');
+      sessionStorage.removeItem('currentRolePresets');
+    }
+
+    function continueToSkills() {
+      if (!sessionStorage.getItem('selectedRole')) { showToast('Please select a role first!', 'error'); return; }
+      window.location.href = 'skills.html';
+    }
+
+    /* Search */
+    document.getElementById('roleSearch').addEventListener('input', function () {
+      filterRoles(this.value.toLowerCase(), document.querySelector('.filter-tab.active')?.dataset.cat || 'all');
+    });
+
+    /* Filter tabs */
+    document.getElementById('filterTabs').addEventListener('click', function (e) {
+      const tab = e.target.closest('.filter-tab');
+      if (!tab) return;
+      document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      filterRoles(document.getElementById('roleSearch').value.toLowerCase(), tab.dataset.cat);
+    });
+
+    function filterRoles(query, cat) {
+      const cards = document.querySelectorAll('.role-card-sm');
+      const sections = document.querySelectorAll('.category-section');
+      let visible = 0;
+
+      sections.forEach(sec => {
+        const secCat = sec.dataset.cat;
+        let secVisible = 0;
+        sec.querySelectorAll('.role-card-sm').forEach(card => {
+          const nameMatch = card.dataset.role.toLowerCase().includes(query) || card.querySelector('.role-desc').textContent.toLowerCase().includes(query) || Array.from(card.querySelectorAll('.role-tag')).some(t => t.textContent.toLowerCase().includes(query));
+          const catMatch = cat === 'all' || card.dataset.cat === cat;
+          const show = nameMatch && catMatch;
+          card.style.display = show ? '' : 'none';
+          if (show) { visible++; secVisible++; }
+        });
+        sec.style.display = secVisible === 0 ? 'none' : '';
+      });
+
+      document.getElementById('noResults').style.display = visible === 0 ? 'block' : 'none';
+      document.getElementById('roleCountBar').innerHTML = `Showing <strong style="color:var(--primary);">${visible} role${visible !== 1 ? 's' : ''}</strong>`;
+    }
+
+    /* Keyboard nav */
+    document.querySelectorAll('.role-card-sm').forEach(card => {
+      card.addEventListener('keypress', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectRole(card); } });
+    });
+
+    /* Load Custom Roles and Hide Removed Built-ins */
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Hide removed built-in roles
+      const hiddenRoles = JSON.parse(localStorage.getItem('skillmatch_hidden_roles') || '[]');
+      if (hiddenRoles.length > 0) {
+        document.querySelectorAll('.role-card-sm').forEach(card => {
+          if (hiddenRoles.includes(card.getAttribute('data-role'))) {
+            card.remove(); // Remove the card completely from the DOM
+          }
+        });
+      }
+
+      // 2. Inject custom roles
+      const customRoles = JSON.parse(localStorage.getItem('skillmatch_custom_roles') || '[]');
+      customRoles.forEach((role, i) => {
+        const catSection = document.querySelector(`.category-section[data-cat="${role.category}"]`);
+        if (!catSection) return;
+        
+        const grid = catSection.querySelector('.roles-grid-4');
+        if (!grid) return;
+        
+        let tagsHtml = '';
+        if (role.skillsList) {
+          const tags = role.skillsList.split(',').map(s => s.trim()).filter(s => s);
+          tagsHtml = tags.slice(0, 3).map(t => `<span class="role-tag">${t}</span>`).join('');
+        }
+        
+        const cardHtml = `
+          <div class="role-card-sm custom-role-card" data-role="${role.name}" data-index="custom-${i}" data-cat="${role.category}" onclick="selectRole(this)" tabindex="0" style="border-color: var(--primary);">
+            <div style="position:absolute; top:8px; right:8px; font-size:0.65rem; background:rgba(99,102,241,0.1); color:var(--primary); padding:2px 6px; border-radius:4px; font-weight:800;">CUSTOM</div>
+            <div class="role-icon-wrap" style="background:linear-gradient(135deg,rgba(99,102,241,.18),rgba(99,102,241,.06));box-shadow:0 6px 18px rgba(99,102,241,.12);">
+              ${role.icon || '💼'}
+            </div>
+            <div class="role-title">${role.name}</div>
+            <div class="role-desc">${role.desc || 'Custom role created by administrator.'}</div>
+            <div class="role-tags">${tagsHtml}</div>
+            <div class="salary-pill">💰 ${role.salary}</div>
+          </div>
+        `;
+        
+        grid.insertAdjacentHTML('afterbegin', cardHtml);
+      });
+      
+      // Update badge counts and clean up empty categories
+      document.querySelectorAll('.category-section').forEach(sec => {
+        const count = sec.querySelectorAll('.role-card-sm').length;
+        if (count === 0) {
+          sec.style.display = 'none'; // Hide category completely if no roles exist
+        } else {
+          sec.style.display = '';
+          const badge = sec.querySelector('.badge');
+          if (badge) badge.textContent = `${count} Roles`;
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Profile — Skill Match</title>
+  <meta name="description" content="View your saved results, skill history, and progress on Skill Match." />
+  <link rel="stylesheet" href="styles.css?v=3" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>" />
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="nav-logo">
+      <div class="logo-icon">🎯</div>
+      <span>Skill Match</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="roles.html" class="nav-link">Explore Roles</a>
+      <a href="courses.html" class="nav-link">Courses</a>
+      <a href="profile.html" class="nav-link active">My Profile</a>
+    </div>
+    <div class="nav-actions">
+      <button class="btn-dark-mode" id="themeToggle" title="Toggle dark mode">🌙</button>
+      <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html" class="mobile-nav-link">🏠 Home</a>
+  <a href="roles.html" class="mobile-nav-link">💼 Explore Roles</a>
+  <a href="courses.html" class="mobile-nav-link">📚 Courses</a>
+  <a href="profile.html" class="mobile-nav-link">👤 My Profile</a>
+</div>
+
+<!-- PAGE -->
+<main class="profile-page">
+  <div class="container">
+
+    <!-- Profile Header Card -->
+    <div class="profile-header-card animate-fade-up">
+      <div style="display:flex;align-items:flex-start;gap:24px;flex-wrap:wrap;position:relative;z-index:1;">
+        <div class="profile-avatar" id="profileAvatar">👤</div>
+        <div style="flex:1;">
+          <div class="profile-name" id="profileName">Career Explorer</div>
+          <div class="profile-role" id="profileRoleTag">🎯 Working towards your goals</div>
+          <div class="profile-stats-row">
+            <div>
+              <div style="font-size:1.5rem;font-weight:800;" id="totalAssessments">0</div>
+              <div style="font-size:.78rem;opacity:.7;">Assessments</div>
+            </div>
+            <div>
+              <div style="font-size:1.5rem;font-weight:800;" id="bestScore">—</div>
+              <div style="font-size:.78rem;opacity:.7;">Best Score</div>
+            </div>
+            <div>
+              <div style="font-size:1.5rem;font-weight:800;" id="rolesExplored">0</div>
+              <div style="font-size:.78rem;opacity:.7;">Roles Explored</div>
+            </div>
+            <div>
+              <div style="font-size:1.5rem;font-weight:800;" id="avgScore">—</div>
+              <div style="font-size:.78rem;opacity:.7;">Avg Score</div>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;flex-shrink:0;">
+          <a href="roles.html" class="btn btn-sm" style="background:rgba(255,255,255,.2);color:#fff;border:1px solid rgba(255,255,255,.3);">
+            ＋ New Assessment
+          </a>
+          <button onclick="clearHistory()" class="btn btn-sm" style="background:rgba(255,0,0,.2);color:#fff;border:1px solid rgba(255,0,0,.3);">
+            🗑️ Clear History
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px;" class="animate-fade-up animate-delay-1">
+      <a href="roles.html" style="padding:20px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);text-align:center;transition:var(--transition);display:block;" onmouseover="this.style.transform='translateY(-4px)';this.style.borderColor='var(--primary)'" onmouseout="this.style.transform='';this.style.borderColor=''">
+        <div style="font-size:1.8rem;margin-bottom:8px;">🔍</div>
+        <div style="font-weight:700;font-size:.9rem;">New Assessment</div>
+        <div style="font-size:.78rem;color:var(--text-muted);margin-top:4px;">Analyze a new role</div>
+      </a>
+      <a href="results.html" style="padding:20px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);text-align:center;transition:var(--transition);display:block;" onmouseover="this.style.transform='translateY(-4px)';this.style.borderColor='var(--primary)'" onmouseout="this.style.transform='';this.style.borderColor=''">
+        <div style="font-size:1.8rem;margin-bottom:8px;">📊</div>
+        <div style="font-weight:700;font-size:.9rem;">Last Results</div>
+        <div style="font-size:.78rem;color:var(--text-muted);margin-top:4px;">View latest report</div>
+      </a>
+      <div style="padding:20px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);text-align:center;cursor:pointer;transition:var(--transition);" onmouseover="this.style.transform='translateY(-4px)';this.style.borderColor='var(--primary)'" onmouseout="this.style.transform='';this.style.borderColor=''" onclick="exportProfile()">
+        <div style="font-size:1.8rem;margin-bottom:8px;">📤</div>
+        <div style="font-weight:700;font-size:.9rem;">Export Report</div>
+        <div style="font-size:.78rem;color:var(--text-muted);margin-top:4px;">Download your data</div>
+      </div>
+      <div style="padding:20px;background:var(--gradient-primary);border-radius:var(--radius-md);text-align:center;cursor:pointer;transition:var(--transition);" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform=''" onclick="shareProfile()">
+        <div style="font-size:1.8rem;margin-bottom:8px;">🔗</div>
+        <div style="font-weight:700;font-size:.9rem;color:#fff;">Share Profile</div>
+        <div style="font-size:.78rem;color:rgba(255,255,255,.7);margin-top:4px;">Copy link</div>
+      </div>
+    </div>
+
+    <!-- Main Grid -->
+    <div style="display:grid;grid-template-columns:1fr 2fr;gap:28px;align-items:start;">
+
+      <!-- LEFT COLUMN -->
+      <div style="display:flex;flex-direction:column;gap:20px;">
+
+        <!-- Progress Ring -->
+        <div class="card animate-fade-up animate-delay-1" style="text-align:center;">
+          <div style="font-weight:700;font-size:1rem;margin-bottom:20px;">Overall Progress</div>
+          <div style="position:relative;display:inline-flex;align-items:center;justify-content:center;margin-bottom:12px;">
+            <svg width="140" height="140" viewBox="0 0 140 140">
+              <circle cx="70" cy="70" r="58" fill="none" stroke="var(--surface)" stroke-width="10"/>
+              <circle id="progressArc" cx="70" cy="70" r="58" fill="none" stroke="url(#pg)" stroke-width="10"
+                stroke-linecap="round" stroke-dasharray="364" stroke-dashoffset="364"
+                transform="rotate(-90 70 70)" style="transition:stroke-dashoffset 1.5s ease;"/>
+              <defs><linearGradient id="pg" x1="0%" y1="0%" x2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#a855f7"/></linearGradient></defs>
+              <text x="70" y="65" text-anchor="middle" font-size="26" font-weight="800" fill="var(--text-primary)" font-family="'Plus Jakarta Sans',sans-serif" id="progressNumber">0%</text>
+              <text x="70" y="84" text-anchor="middle" font-size="10" fill="var(--text-muted)" font-family="Inter" font-weight="600">BEST SCORE</text>
+            </svg>
+          </div>
+          <div style="font-size:.82rem;color:var(--text-secondary);" id="progressNote">Complete an assessment to see your score</div>
+        </div>
+
+        <!-- Skill Levels Chart -->
+        <div class="card animate-fade-up animate-delay-2">
+          <div style="font-weight:700;font-size:1rem;margin-bottom:16px;">Skill Level Distribution</div>
+          <div id="levelChart" style="display:flex;flex-direction:column;gap:10px;">
+            <div style="text-align:center;padding:20px;color:var(--text-muted);font-size:.85rem;">No data yet</div>
+          </div>
+        </div>
+
+        <!-- Achievement Badges -->
+        <div class="card animate-fade-up animate-delay-3">
+          <div style="font-weight:700;font-size:1rem;margin-bottom:16px;">🏅 Achievements</div>
+          <div id="achievements" style="display:flex;flex-direction:column;gap:10px;">
+            <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:var(--radius);opacity:.4;">
+              <span style="font-size:1.3rem;">🏆</span>
+              <div><div style="font-weight:600;font-size:.85rem;">First Assessment</div><div style="font-size:.75rem;color:var(--text-muted);">Complete your first analysis</div></div>
+              <span style="margin-left:auto;font-size:.72rem;color:var(--text-muted);">Locked</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:var(--radius);opacity:.4;">
+              <span style="font-size:1.3rem;">⭐</span>
+              <div><div style="font-weight:600;font-size:.85rem;">High Scorer</div><div style="font-size:.75rem;color:var(--text-muted);">Score 80%+ on any role</div></div>
+              <span style="margin-left:auto;font-size:.72rem;color:var(--text-muted);">Locked</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:var(--radius);opacity:.4;">
+              <span style="font-size:1.3rem;">🎯</span>
+              <div><div style="font-weight:600;font-size:.85rem;">Multi-Role Explorer</div><div style="font-size:.75rem;color:var(--text-muted);">Explore 3+ roles</div></div>
+              <span style="margin-left:auto;font-size:.72rem;color:var(--text-muted);">Locked</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT COLUMN -->
+      <div style="display:flex;flex-direction:column;gap:20px;">
+
+        <!-- Assessment History -->
+        <div class="animate-fade-up animate-delay-1">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+            <div>
+              <div class="section-label" style="margin-bottom:4px;">Assessment History</div>
+              <h2 style="font-family:var(--font-display);font-weight:800;font-size:1.2rem;">Past Results</h2>
+            </div>
+            <a href="roles.html" class="btn btn-primary btn-sm">＋ New</a>
+          </div>
+
+          <div id="historyList">
+            <!-- Empty state -->
+            <div id="emptyHistory" style="text-align:center;padding:60px 24px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);">
+              <div style="font-size:3.5rem;margin-bottom:16px;">🗂️</div>
+              <div style="font-weight:700;font-size:1.1rem;margin-bottom:8px;">No assessments yet</div>
+              <div style="color:var(--text-muted);font-size:.9rem;max-width:300px;margin:0 auto 24px;line-height:1.6;">Complete your first skill assessment to see your results here.</div>
+              <a href="roles.html" class="btn btn-primary">Start Your First Assessment</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Skills Across All Roles -->
+        <div class="card animate-fade-up animate-delay-2" id="skillsAcrossRoles" style="display:none;">
+          <div style="font-weight:700;font-size:1rem;margin-bottom:16px;">🧠 Skills Tracked Across Roles</div>
+          <div id="allSkillsList" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
+        </div>
+
+        <!-- Progress over time -->
+        <div class="card animate-fade-up animate-delay-3" id="progressCard" style="display:none;">
+          <div style="font-weight:700;font-size:1rem;margin-bottom:16px;">📈 Score Progress</div>
+          <canvas id="progressChart" height="120" style="width:100%;"></canvas>
+        </div>
+
+        <!-- Tips Section -->
+        <div class="card animate-fade-up animate-delay-4" style="background:linear-gradient(135deg,rgba(99,102,241,.08),rgba(168,85,247,.08));border-color:rgba(99,102,241,.2);">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+            <div style="width:40px;height:40px;border-radius:50%;background:var(--gradient-primary);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;">🤖</div>
+            <div><div style="font-weight:700;">Career Tips from AI</div><div style="font-size:.78rem;color:var(--text-muted);">Personalized for you</div></div>
+          </div>
+          <div id="aiCareerTips" style="display:flex;flex-direction:column;gap:10px;">
+            <div style="padding:12px 16px;background:var(--bg-card);border-radius:var(--radius);font-size:.88rem;color:var(--text-secondary);line-height:1.6;">
+              💡 <strong>Start with a clear goal.</strong> Pick one job role and focus on it completely before branching out. Depth beats breadth early in your career.
+            </div>
+            <div style="padding:12px 16px;background:var(--bg-card);border-radius:var(--radius);font-size:.88rem;color:var(--text-secondary);line-height:1.6;">
+              🏗️ <strong>Build projects, not just theory.</strong> Employers care about what you've built. Every skill you learn should go into a project you can show.
+            </div>
+            <div style="padding:12px 16px;background:var(--bg-card);border-radius:var(--radius);font-size:.88rem;color:var(--text-secondary);line-height:1.6;">
+              📅 <strong>Consistency beats intensity.</strong> 1 hour daily for 6 months beats weekend marathons. Track your learning streaks.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script src="app.js?v=2"></script>
+<script>
+function loadProfile() {
+  const history = JSON.parse(localStorage.getItem('skillmatch_history') || '[]');
+
+  // Stats
+  document.getElementById('totalAssessments').textContent = history.length;
+  const scores = history.map(h => h.score);
+  const best = scores.length ? Math.max(...scores) : null;
+  const avg = scores.length ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : null;
+  const roles = [...new Set(history.map(h => h.role))];
+
+  document.getElementById('bestScore').textContent = best !== null ? best + '%' : '—';
+  document.getElementById('avgScore').textContent = avg !== null ? avg + '%' : '—';
+  document.getElementById('rolesExplored').textContent = roles.length;
+
+  if (best !== null) {
+    document.getElementById('profileRoleTag').textContent = `🏆 Best: ${history.find(h=>h.score===best)?.role} (${best}%)`;
+    // Progress ring
+    const arc = document.getElementById('progressArc');
+    const circumference = 364;
+    setTimeout(() => {
+      arc.style.strokeDashoffset = circumference - (circumference * best / 100);
+      document.getElementById('progressNumber').textContent = best + '%';
+      document.getElementById('progressNote').textContent = best >= 80 ? '🎉 Excellent progress!' : best >= 60 ? '📈 Good progress! Keep going.' : '💪 Keep improving!';
+    }, 400);
+  }
+
+  // History list
+  if (history.length > 0) {
+    document.getElementById('emptyHistory').style.display = 'none';
+    const list = document.getElementById('historyList');
+    // Remove empty state
+    list.innerHTML = '';
+
+    history.forEach((item, i) => {
+      const grade = item.score >= 85 ? { label:'Excellent', c:'#10b981' } : item.score >= 65 ? { label:'Good', c:'#6366f1' } : item.score >= 40 ? { label:'Fair', c:'#f59e0b' } : { label:'Needs Work', c:'#ef4444' };
+      const card = document.createElement('div');
+      card.className = 'history-card';
+      card.style.marginBottom = '12px';
+      card.style.animation = `fadeUp .5s ${i * 0.1}s ease both`;
+      card.innerHTML = `
+        <div class="history-header">
+          <span style="font-size:1.4rem;">${item.emoji}</span>
+          <div>
+            <div style="font-weight:700;font-size:.95rem;">${item.role}</div>
+            <div style="font-size:.78rem;color:var(--text-muted);">📅 ${item.date}</div>
+          </div>
+          <div style="margin-left:auto;text-align:right;">
+            <div class="history-score-badge" style="color:${grade.c};">${item.score}%</div>
+            <div style="font-size:.72rem;font-weight:600;color:${grade.c};">${grade.label}</div>
+          </div>
+        </div>
+        <div class="history-body">
+          <div style="display:flex;gap:12px;margin-bottom:12px;flex-wrap:wrap;">
+            <span style="font-size:.82rem;padding:4px 10px;background:rgba(16,185,129,.1);border-radius:var(--radius-full);color:var(--success);">✅ ${item.strong} Strong</span>
+            <span style="font-size:.82rem;padding:4px 10px;background:rgba(245,158,11,.1);border-radius:var(--radius-full);color:var(--warning);">⚠️ ${item.weak} Weak</span>
+            <span style="font-size:.82rem;padding:4px 10px;background:rgba(239,68,68,.1);border-radius:var(--radius-full);color:var(--danger);">❌ ${item.missing} Missing</span>
+          </div>
+          <div class="progress-bar-wrap" style="margin-bottom:8px;">
+            <div class="progress-bar-fill" style="width:${item.score}%;background:linear-gradient(90deg,${grade.c},${grade.c}99);"></div>
+          </div>
+          <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px;">
+            <button onclick="viewResult('${item.role}','${JSON.stringify(item.skills).replace(/'/g,"\\'")}' )" class="btn btn-ghost btn-sm">View Details →</button>
+          </div>
+        </div>
+      `;
+      list.appendChild(card);
+    });
+
+    // Skills across roles
+    if (history.length > 0) {
+      document.getElementById('skillsAcrossRoles').style.display = 'block';
+      document.getElementById('progressCard').style.display = 'block';
+      const allSkills = [...new Set(history.flatMap(h => (h.skills || []).map(s => s.name)))];
+      document.getElementById('allSkillsList').innerHTML = allSkills.map(s => `<span class="timeline-skill" style="font-size:.8rem;">${s}</span>`).join('');
+
+      // Level distribution
+      const allLevels = history.flatMap(h => h.skills || []);
+      const beginner = allLevels.filter(s => s.level === 'Beginner').length;
+      const intermediate = allLevels.filter(s => s.level === 'Intermediate').length;
+      const advanced = allLevels.filter(s => s.level === 'Advanced').length;
+      const total = allLevels.length || 1;
+      document.getElementById('levelChart').innerHTML = `
+        <div>
+          <div style="display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:5px;"><span style="color:var(--success);font-weight:600;">🟠 Advanced</span><span>${advanced}</span></div>
+          <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:${Math.round(advanced/total*100)}%;background:linear-gradient(90deg,#f59e0b,#ef4444);"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:5px;"><span style="color:var(--primary);font-weight:600;">🔵 Intermediate</span><span>${intermediate}</span></div>
+          <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:${Math.round(intermediate/total*100)}%;"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:5px;"><span style="color:var(--success);font-weight:600;">🟢 Beginner</span><span>${beginner}</span></div>
+          <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:${Math.round(beginner/total*100)}%;background:linear-gradient(90deg,#10b981,#06b6d4);"></div></div>
+        </div>
+      `;
+
+      // Achievements
+      const achievEl = document.getElementById('achievements');
+      let achHTML = '';
+      if (history.length >= 1) achHTML += `<div style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:var(--radius);background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);"><span style="font-size:1.3rem;">🏆</span><div><div style="font-weight:600;font-size:.85rem;">First Assessment</div><div style="font-size:.75rem;color:var(--success);">Completed! 🎉</div></div><span style="margin-left:auto;font-size:.72rem;color:var(--success);font-weight:700;">Unlocked</span></div>`;
+      else achHTML += `<div style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:var(--radius);opacity:.4;"><span style="font-size:1.3rem;">🏆</span><div><div style="font-weight:600;font-size:.85rem;">First Assessment</div><div style="font-size:.75rem;color:var(--text-muted);">Complete your first analysis</div></div><span style="margin-left:auto;font-size:.72rem;color:var(--text-muted);">Locked</span></div>`;
+      if (best >= 80) achHTML += `<div style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:var(--radius);background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.2);"><span style="font-size:1.3rem;">⭐</span><div><div style="font-weight:600;font-size:.85rem;">High Scorer</div><div style="font-size:.75rem;color:var(--primary);">Scored ${best}%! 🎊</div></div><span style="margin-left:auto;font-size:.72rem;color:var(--primary);font-weight:700;">Unlocked</span></div>`;
+      else achHTML += `<div style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:var(--radius);opacity:.4;"><span style="font-size:1.3rem;">⭐</span><div><div style="font-weight:600;font-size:.85rem;">High Scorer</div><div style="font-size:.75rem;color:var(--text-muted);">Score 80%+ on any role</div></div><span style="margin-left:auto;font-size:.72rem;color:var(--text-muted);">Locked</span></div>`;
+      if (roles.length >= 3) achHTML += `<div style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:var(--radius);background:rgba(168,85,247,.08);border:1px solid rgba(168,85,247,.2);"><span style="font-size:1.3rem;">🎯</span><div><div style="font-weight:600;font-size:.85rem;">Multi-Role Explorer</div><div style="font-size:.75rem;color:var(--secondary);">Explored ${roles.length} roles!</div></div><span style="margin-left:auto;font-size:.72rem;color:var(--secondary);font-weight:700;">Unlocked</span></div>`;
+      else achHTML += `<div style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:var(--radius);opacity:.4;"><span style="font-size:1.3rem;">🎯</span><div><div style="font-weight:600;font-size:.85rem;">Multi-Role Explorer</div><div style="font-size:.75rem;color:var(--text-muted);">Explore 3+ roles</div></div><span style="margin-left:auto;font-size:.72rem;color:var(--text-muted);">Locked</span></div>`;
+      achievEl.innerHTML = achHTML;
+
+      // Draw progress chart
+      drawProgressChart(history.slice().reverse());
+    }
+  }
+}
+
+function viewResult(role, skillsJson) {
+  sessionStorage.setItem('selectedRole', role);
+  try { sessionStorage.setItem('userSkills', skillsJson); } catch(e) {}
+  window.location.href = 'results.html';
+}
+
+function clearHistory() {
+  if (confirm('Are you sure you want to clear all assessment history? This cannot be undone.')) {
+    localStorage.removeItem('skillmatch_history');
+    showToast('🗑️ History cleared', 'error');
+    setTimeout(() => location.reload(), 1000);
+  }
+}
+
+function exportProfile() {
+  const history = JSON.parse(localStorage.getItem('skillmatch_history') || '[]');
+  const data = { exportedAt: new Date().toISOString(), assessments: history };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = 'skillmatch_profile.json'; a.click();
+  URL.revokeObjectURL(url);
+  showToast('📤 Profile exported!', 'success');
+}
+
+function shareProfile() {
+  navigator.clipboard.writeText(window.location.href).then(() => showToast('🔗 Profile link copied!', 'success'));
+}
+
+function drawProgressChart(history) {
+  const canvas = document.getElementById('progressChart');
+  if (!canvas || history.length < 2) return;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.offsetWidth || 500, H = 120;
+  canvas.width = W; canvas.height = H;
+  const scores = history.map(h => h.score);
+  const labels = history.map(h => h.role.split(' ')[0]);
+  const max = 100, min = 0, pad = 20;
+
+  ctx.clearRect(0, 0, W, H);
+
+  // Grid
+  [0, 25, 50, 75, 100].forEach(v => {
+    const y = pad + (H - pad * 2) * (1 - v / 100);
+    ctx.beginPath(); ctx.moveTo(pad, y); ctx.lineTo(W - pad, y);
+    ctx.strokeStyle = 'var(--border)'; ctx.lineWidth = .5; ctx.stroke();
+    ctx.fillStyle = 'var(--text-muted)'; ctx.font = '9px Inter'; ctx.textAlign = 'right';
+    ctx.fillText(v + '%', pad - 4, y + 3);
+  });
+
+  if (scores.length < 2) return;
+  const stepX = (W - pad * 2) / (scores.length - 1);
+
+  // Line
+  const grad = ctx.createLinearGradient(pad, 0, W - pad, 0);
+  grad.addColorStop(0, '#6366f1'); grad.addColorStop(1, '#a855f7');
+  ctx.beginPath();
+  scores.forEach((s, i) => {
+    const x = pad + i * stepX, y = pad + (H - pad * 2) * (1 - s / 100);
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  });
+  ctx.strokeStyle = grad; ctx.lineWidth = 2.5; ctx.stroke();
+
+  // Area
+  ctx.beginPath();
+  scores.forEach((s, i) => {
+    const x = pad + i * stepX, y = pad + (H - pad * 2) * (1 - s / 100);
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  });
+  ctx.lineTo(pad + (scores.length - 1) * stepX, H - pad);
+  ctx.lineTo(pad, H - pad);
+  ctx.closePath();
+  const areaGrad = ctx.createLinearGradient(0, 0, 0, H);
+  areaGrad.addColorStop(0, 'rgba(99,102,241,.2)'); areaGrad.addColorStop(1, 'rgba(99,102,241,0)');
+  ctx.fillStyle = areaGrad; ctx.fill();
+
+  // Points
+  scores.forEach((s, i) => {
+    const x = pad + i * stepX, y = pad + (H - pad * 2) * (1 - s / 100);
+    ctx.beginPath(); ctx.arc(x, y, 4, 0, Math.PI * 2);
+    ctx.fillStyle = '#6366f1'; ctx.fill();
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke();
+    ctx.fillStyle = 'var(--text-muted)'; ctx.font = '9px Inter'; ctx.textAlign = 'center';
+    ctx.fillText(labels[i], x, H - 4);
+    ctx.fillStyle = '#6366f1'; ctx.font = 'bold 9px Inter';
+    ctx.fillText(s + '%', x, y - 8);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', loadProfile);
+</script>
+</body>
+</html>

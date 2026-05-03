@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Results — Skill Match</title>
+  <meta name="description" content="View your job readiness score, skill breakdown, and personalized improvement suggestions." />
+  <link rel="stylesheet" href="styles.css?v=3" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>" />
+  <style>
+    /* Radar chart canvas */
+    #radarCanvas { display:block; margin:0 auto; }
+
+    /* Animated counter */
+    .count-up { display:inline-block; }
+
+    /* Score color bands */
+    .score-excellent { color:#10b981; }
+    .score-good      { color:#6366f1; }
+    .score-fair      { color:#f59e0b; }
+    .score-poor      { color:#ef4444; }
+
+    /* Print styles */
+    @media print {
+      .navbar,.share-bar,.nav-actions { display:none!important; }
+      body { background:#fff!important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="nav-logo">
+      <div class="logo-icon">🎯</div>
+      <span>Skill Match</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="roles.html" class="nav-link">← Try Another Role</a>
+    </div>
+    <div class="nav-actions">
+      <button class="btn-dark-mode" id="themeToggle" title="Toggle dark mode">🌙</button>
+      <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html" class="mobile-nav-link">🏠 Home</a>
+  <a href="roles.html" class="mobile-nav-link">← Try Another Role</a>
+</div>
+
+<!-- PAGE -->
+<main class="results-page">
+  <div class="container">
+
+    <!-- Step Indicator -->
+    <div class="step-indicator" style="max-width:500px;margin:0 auto 40px;">
+      <div class="step done">
+        <div class="step-wrapper">
+          <div class="step-circle">✓</div>
+          <div class="step-label">Select Role</div>
+        </div>
+      </div>
+      <div class="step-line done"></div>
+      <div class="step done">
+        <div class="step-wrapper">
+          <div class="step-circle">✓</div>
+          <div class="step-label">Add Skills</div>
+        </div>
+      </div>
+      <div class="step-line done"></div>
+      <div class="step active">
+        <div class="step-wrapper">
+          <div class="step-circle">3</div>
+          <div class="step-label">Results</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Results Header -->
+    <div class="results-header">
+      <div class="badge badge-success animate-fade-up" style="margin:0 auto 16px;width:fit-content;">
+        ✅ Analysis Complete
+      </div>
+      <h1 class="section-title animate-fade-up animate-delay-1">
+        Your <span class="text-gradient">Job Readiness</span> Report
+      </h1>
+      <p class="section-desc animate-fade-up animate-delay-2" style="margin:0 auto;" id="resultsSubtitle">
+        Here's how your skills match up for the selected role.
+      </p>
+    </div>
+
+    <!-- ── SCORE SECTION ── -->
+    <div class="score-section animate-fade-up animate-delay-2" id="scoreSection">
+      <!-- Circular Score -->
+      <div style="text-align:center;">
+        <div style="position:relative;display:inline-flex;flex-direction:column;align-items:center;">
+          <svg id="scoreSvg" width="200" height="200" viewBox="0 0 200 200">
+            <circle cx="100" cy="100" r="84" fill="none" stroke="var(--surface)" stroke-width="12"/>
+            <circle id="scoreArc" cx="100" cy="100" r="84" fill="none"
+              stroke="url(#scoreGrad)" stroke-width="12"
+              stroke-linecap="round"
+              stroke-dasharray="528"
+              stroke-dashoffset="528"
+              transform="rotate(-90 100 100)"
+              style="transition:stroke-dashoffset 1.8s cubic-bezier(.4,0,.2,1)"/>
+            <defs>
+              <linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#6366f1"/>
+                <stop offset="100%" stop-color="#a855f7"/>
+              </linearGradient>
+            </defs>
+            <text id="scoreText" x="100" y="90" text-anchor="middle"
+              font-size="42" font-weight="900" fill="var(--text-primary)"
+              font-family="'Plus Jakarta Sans',sans-serif">0%</text>
+            <text x="100" y="115" text-anchor="middle"
+              font-size="11" fill="var(--text-muted)"
+              font-family="Inter,sans-serif" font-weight="600"
+              letter-spacing="1">MATCH SCORE</text>
+            <text id="scoreGrade" x="100" y="138" text-anchor="middle"
+              font-size="13" font-weight="700"
+              font-family="'Plus Jakarta Sans',sans-serif">Excellent</text>
+          </svg>
+          <div id="scoreRoleLabel" style="font-size:.85rem;color:var(--text-muted);font-weight:600;margin-top:4px;"></div>
+        </div>
+      </div>
+
+      <!-- Score Details -->
+      <div class="score-label-section">
+        <div id="scoreGradeBadge" class="score-grade">
+          <span>🏆</span> <span id="gradeText">Excellent Match</span>
+        </div>
+        <div>
+          <div class="score-breakdown-title" id="scoreSummaryTitle">You're Well Prepared!</div>
+          <div class="score-breakdown-desc" id="scoreSummaryDesc">Your skills align strongly with the role requirements. Focus on the missing skills to reach 100%.</div>
+        </div>
+
+        <!-- Mini stat pills -->
+        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+          <div style="padding:10px 18px;background:rgba(16,185,129,.1);border-radius:var(--radius-full);display:flex;align-items:center;gap:8px;">
+            <span style="font-size:1rem;">✅</span>
+            <div><div id="strongCount" style="font-weight:800;font-size:1.1rem;color:var(--success);">0</div><div style="font-size:.72rem;color:var(--text-muted);font-weight:600;">Strong</div></div>
+          </div>
+          <div style="padding:10px 18px;background:rgba(245,158,11,.1);border-radius:var(--radius-full);display:flex;align-items:center;gap:8px;">
+            <span style="font-size:1rem;">⚠️</span>
+            <div><div id="weakCount" style="font-weight:800;font-size:1.1rem;color:var(--warning);">0</div><div style="font-size:.72rem;color:var(--text-muted);font-weight:600;">Weak</div></div>
+          </div>
+          <div style="padding:10px 18px;background:rgba(239,68,68,.1);border-radius:var(--radius-full);display:flex;align-items:center;gap:8px;">
+            <span style="font-size:1rem;">❌</span>
+            <div><div id="missingCount" style="font-weight:800;font-size:1.1rem;color:var(--danger);">0</div><div style="font-size:.72rem;color:var(--text-muted);font-weight:600;">Missing</div></div>
+          </div>
+        </div>
+
+        <!-- Score bar breakdown -->
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:5px;font-weight:600;">
+              <span>Technical Skills</span><span id="techPct" style="color:var(--primary);">0%</span>
+            </div>
+            <div class="progress-bar-wrap"><div class="progress-bar-fill" id="techBar" style="width:0%"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:5px;font-weight:600;">
+              <span>Tools & Technologies</span><span id="toolsPct" style="color:var(--primary);">0%</span>
+            </div>
+            <div class="progress-bar-wrap"><div class="progress-bar-fill" id="toolsBar" style="width:0%;background:linear-gradient(90deg,#a855f7,#6366f1)"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:5px;font-weight:600;">
+              <span>Domain Knowledge</span><span id="domainPct" style="color:var(--primary);">0%</span>
+            </div>
+            <div class="progress-bar-wrap"><div class="progress-bar-fill" id="domainBar" style="width:0%;background:linear-gradient(90deg,#06b6d4,#10b981)"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SHARE BAR ── -->
+    <div class="share-bar animate-fade-up animate-delay-3">
+      <div>
+        <div class="share-bar-title">🎉 Share Your Results!</div>
+        <div class="share-bar-desc">Let your network know about your career readiness score</div>
+      </div>
+      <div class="share-bar-actions">
+        <button class="btn-share" onclick="shareResults('copy')">📋 Copy Link</button>
+        <button class="btn-share" onclick="shareResults('linkedin')">in LinkedIn</button>
+        <button class="btn-share" onclick="window.print()">🖨️ Print</button>
+      </div>
+    </div>
+
+    <!-- ── SKILLS BREAKDOWN ── -->
+    <div style="margin-bottom:16px;" class="animate-fade-up animate-delay-3">
+      <div class="section-label">Skill Analysis</div>
+      <h2 class="section-title" style="font-size:1.6rem;">Skills Breakdown</h2>
+    </div>
+
+    <div class="skills-breakdown-grid animate-fade-up animate-delay-3">
+      <!-- Strong Skills -->
+      <div class="breakdown-card">
+        <div class="breakdown-header" style="background:rgba(16,185,129,.05);">
+          <span style="font-size:1.2rem;">✅</span>
+          <span style="font-weight:700;color:var(--success);">Strong Skills</span>
+          <span class="breakdown-count badge-success badge" id="strongBadge">0</span>
+        </div>
+        <div class="breakdown-body" id="strongSkillsList">
+          <div style="text-align:center;padding:20px;color:var(--text-muted);font-size:.85rem;">No strong skills yet</div>
+        </div>
+      </div>
+
+      <!-- Weak Skills -->
+      <div class="breakdown-card">
+        <div class="breakdown-header" style="background:rgba(245,158,11,.05);">
+          <span style="font-size:1.2rem;">⚠️</span>
+          <span style="font-weight:700;color:var(--warning);">Needs Improvement</span>
+          <span class="breakdown-count badge-warning badge" id="weakBadge">0</span>
+        </div>
+        <div class="breakdown-body" id="weakSkillsList">
+          <div style="text-align:center;padding:20px;color:var(--text-muted);font-size:.85rem;">No weak skills</div>
+        </div>
+      </div>
+
+      <!-- Missing Skills -->
+      <div class="breakdown-card">
+        <div class="breakdown-header" style="background:rgba(239,68,68,.05);">
+          <span style="font-size:1.2rem;">❌</span>
+          <span style="font-weight:700;color:var(--danger);">Missing Skills</span>
+          <span class="breakdown-count badge-danger badge" id="missingBadge">0</span>
+        </div>
+        <div class="breakdown-body" id="missingSkillsList">
+          <div style="text-align:center;padding:20px;color:var(--text-muted);font-size:.85rem;">No missing skills</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── CERTIFICATIONS ── -->
+    <div class="card animate-fade-up animate-delay-4" style="margin-bottom:32px;padding:32px;">
+      <div style="margin-bottom:20px;">
+        <div class="section-label">Credentials & Qualifications</div>
+        <h2 style="font-family:var(--font-display);font-weight:700;font-size:1.3rem;">Recommended Certifications</h2>
+      </div>
+      <div id="certificationsList" style="display:flex;flex-direction:column;gap:12px;">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+
+
+    <!-- ── AI SUGGESTIONS ── -->
+    <div style="margin-bottom:16px;" class="animate-fade-up animate-delay-4">
+      <div class="section-label">Personalized Advice</div>
+      <h2 class="section-title" style="font-size:1.6rem;">🤖 AI Improvement Suggestions</h2>
+    </div>
+    <div class="suggestion-cards animate-fade-up animate-delay-4" id="suggestionCards">
+      <!-- Populated by JS -->
+    </div>
+
+    <!-- ── CAREER ROADMAP ── -->
+    <div style="margin:40px 0 16px;" class="animate-fade-up animate-delay-5">
+      <div class="section-label">Your Path to Job-Ready</div>
+      <h2 class="section-title" style="font-size:1.6rem;">🗺️ Career Roadmap</h2>
+      <p style="color:var(--text-secondary);font-size:.95rem;margin-top:4px;">A phased learning plan tailored for your role and current skill level.</p>
+    </div>
+    <div class="roadmap-timeline animate-fade-up animate-delay-5" id="roadmapTimeline">
+      <!-- Populated by JS -->
+    </div>
+
+    <!-- ── BOTTOM CTA ── -->
+    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:48px;padding-top:32px;border-top:1px solid var(--border);" class="animate-fade-up animate-delay-5">
+      <a href="roles.html" class="btn btn-secondary btn-lg">🔄 Try Another Role</a>
+      <a href="skills.html" class="btn btn-ghost btn-lg">← Edit Skills</a>
+    </div>
+
+  </div>
+</main>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script src="app.js?v=2"></script>
+<script>
+/* ══════════════════════════════════════
+   RESULTS PAGE LOGIC
+══════════════════════════════════════ */
+
+/* ── Role data ── */
+const ROLE_DATA = {
+  'Software Developer': {
+    emoji: '💻',
+    required: ['Data Structures & Algorithms','Python','Java','C/C++','Object-Oriented Programming','SQL / Databases','Git & GitHub','System Design','REST APIs','Problem Solving'],
+    roadmap: [
+      { phase:'Phase 1 — Foundation (Month 1–2)', title:'Core Programming & DSA', desc:'Master a primary language and build problem-solving skills.', skills:['Python or Java','Data Structures','Algorithms','OOP Concepts'] },
+      { phase:'Phase 2 — Backend & Databases (Month 3–4)', title:'DB & API Development', desc:'Learn database design, SQL, and REST API development.', skills:['SQL / PostgreSQL','REST APIs','Git & GitHub','Basic Backend Framework'] },
+      { phase:'Phase 3 — System Design (Month 5–6)', title:'Architecture & Scalability', desc:'Understand how to design large-scale systems and prepare for interviews.', skills:['System Design','Microservices','Cloud Basics','Interview Prep'] }
+    ],
+    courses: [
+      { title:'Data Structures & Algorithms Bootcamp', platform:'Udemy', icon:'🎓', color:'#6366f1', duration:'40 hrs', rating:'4.8', url:'https://www.udemy.com/course/js-algorithms-and-data-structures-masterclass/' },
+      { title:'Complete Python Developer', platform:'Udemy', icon:'🐍', color:'#10b981', duration:'30 hrs', rating:'4.7', url:'https://www.udemy.com/course/complete-python-developer-zero-to-mastery/' },
+      { title:'System Design Interview Prep', platform:'Coursera', icon:'⚙️', color:'#a855f7', duration:'20 hrs', rating:'4.9', url:'https://www.coursera.org/learn/system-design' },
+      { title:'Advanced Java Programming', platform:'Coursera', icon:'☕', color:'#f59e0b', duration:'25 hrs', rating:'4.7', url:'https://www.coursera.org/specializations/java-programming' },
+      { title:'React - The Complete Guide', platform:'Udemy', icon:'⚛️', color:'#06b6d4', duration:'45 hrs', rating:'4.8', url:'https://www.udemy.com/course/react-the-complete-guide-incl-redux/' },
+      { title:'Mastering Git and GitHub', platform:'YouTube', icon:'🐙', color:'#ef4444', duration:'10 hrs', rating:'4.9', url:'https://www.youtube.com/results?search_query=git+and+github+tutorial' }
+    ],
+    suggestions: [
+      { icon:'🎯', title:'Focus on DSA First', desc:'Data Structures & Algorithms are tested in every tech interview. Solve 150+ problems on LeetCode starting with Easy, then Medium.' },
+      { icon:'💡', title:'Build Real Projects', desc:'Side projects demonstrate practical skills. Build a full-stack app — even a simple CRUD app with a proper DB is impressive.' },
+      { icon:'🔗', title:'Master Git & GitHub', desc:'Version control is non-negotiable. Learn branching, pull requests, and contribution workflows. Contribute to open source.' },
+      { icon:'📝', title:'Crack System Design', desc:'For experienced roles, System Design is key. Study concepts like caching, load balancing, and microservices architecture.' }
+    ]
+  },
+  'QA Engineer': {
+    emoji: '🧪',
+    required: ['Manual Testing','Automation Testing','Selenium','Cypress','Jira','API Testing','SQL','Git','CI/CD','Problem Solving'],
+    roadmap: [
+      { phase:'Phase 1 — Foundation (Month 1)', title:'Manual Testing & Test Cases', desc:'Learn testing methodologies, bug tracking in Jira, and writing test cases.', skills:['Manual Testing','Jira','Testing Methodologies','SQL Basics'] },
+      { phase:'Phase 2 — Automation (Month 2–3)', title:'UI & API Automation', desc:'Automate UI workflows with Selenium/Cypress and test APIs with Postman.', skills:['Selenium / Cypress','API Testing (Postman)','Python / Java','Git'] },
+      { phase:'Phase 3 — CI/CD & Scale (Month 4)', title:'CI/CD Integration', desc:'Integrate automated tests into continuous integration pipelines.', skills:['CI/CD','Jenkins / GitHub Actions','Performance Testing','Automation Frameworks'] }
+    ],
+    courses: [
+      { title:'Selenium WebDriver Bootcamp', platform:'Udemy', icon:'🧪', color:'#10b981', duration:'30 hrs', rating:'4.8', url:'https://www.udemy.com/course/selenium-real-time-examplesinterview-questions/' },
+      { title:'Cypress - Modern Automation', platform:'Udemy', icon:'⚙️', color:'#6366f1', duration:'20 hrs', rating:'4.7', url:'https://www.udemy.com/course/cypress-tutorial/' },
+      { title:'Postman API Testing', platform:'YouTube', icon:'🌐', color:'#f59e0b', duration:'5 hrs', rating:'4.9', url:'https://www.youtube.com/results?search_query=postman+api+testing+crash+course' },
+      { title:'Playwright with JS', platform:'Udemy', icon:'🎭', color:'#a855f7', duration:'22 hrs', rating:'4.8', url:'https://www.udemy.com/course/playwright-tutorials-automation-testing/' },
+      { title:'Jira for Beginners', platform:'Coursera', icon:'📝', color:'#10b981', duration:'8 hrs', rating:'4.6', url:'https://www.coursera.org/learn/agile-atlassian-jira' },
+      { title:'SQL for QA Engineers', platform:'YouTube', icon:'🗄️', color:'#f59e0b', duration:'12 hrs', rating:'4.8', url:'https://www.youtube.com/results?search_query=sql+for+qa' }
+    ],
+    suggestions: [
+      { icon:'⚙️', title:'Shift to Automation', desc:'Manual testing is a great start, but automation (Selenium, Cypress, Playwright) is where the demand and high salaries are.' },
+      { icon:'🌐', title:'Master API Testing', desc:'Modern apps are API-driven. Get highly proficient in testing REST APIs using Postman or automation libraries.' },
+      { icon:'🔄', title:'Learn CI/CD Basics', desc:'Knowing how to integrate your automated tests into a Jenkins or GitHub Actions pipeline makes you a top-tier candidate.' },
+      { icon:'📝', title:'Write Clear Bug Reports', desc:'A QA is only as good as their communication. Practice writing detailed, reproducible bug reports in Jira.' }
+    ]
+  },
+  'Technical Writer': {
+    emoji: '✍️',
+    required: ['Markdown','API Documentation','Git','HTML/CSS','Technical Writing','Editing','Jira','REST APIs','Swagger','Communication'],
+    roadmap: [
+      { phase:'Phase 1 — Writing Foundation (Month 1)', title:'Docs as Code & Markdown', desc:'Learn the docs-as-code philosophy, Markdown, and technical writing basics.', skills:['Markdown','Technical Writing','Style Guides','Editing'] },
+      { phase:'Phase 2 — APIs & Git (Month 2)', title:'API Documentation', desc:'Understand REST APIs, Swagger, and version control using Git.', skills:['REST APIs','Swagger / OpenAPI','Git & GitHub','HTML/CSS Basics'] },
+      { phase:'Phase 3 — Tools & Architecture (Month 3)', title:'Static Site Generators', desc:'Learn to build and deploy docs using tools like Docusaurus or Sphinx.', skills:['Docusaurus / Sphinx','Information Architecture','User Tutorials','Agile'] }
+    ],
+    courses: [
+      { title:'Technical Writing Masterclass', platform:'Udemy', icon:'✍️', color:'#ec4899', duration:'10 hrs', rating:'4.7', url:'https://www.udemy.com/course/technical-writing-and-editing/' },
+      { title:'Documenting APIs', platform:'IdRatherBeWriting', icon:'🌐', color:'#10b981', duration:'Self-paced', rating:'4.9', url:'https://idratherbewriting.com/learnapidoc/' },
+      { title:'Git & GitHub for Writers', platform:'YouTube', icon:'📂', color:'#f59e0b', duration:'3 hrs', rating:'4.8', url:'https://www.youtube.com/results?search_query=git+for+technical+writers' },
+      { title:'Docusaurus Crash Course', platform:'YouTube', icon:'🦖', color:'#10b981', duration:'3 hrs', rating:'4.8', url:'https://www.youtube.com/results?search_query=docusaurus+tutorial' },
+      { title:'Markdown & Docs-as-Code', platform:'Udemy', icon:'📝', color:'#6366f1', duration:'5 hrs', rating:'4.7', url:'https://www.udemy.com/course/markdown-crash-course/' },
+      { title:'Swagger OpenAPI Spec', platform:'Udemy', icon:'🌐', color:'#f59e0b', duration:'8 hrs', rating:'4.6', url:'https://www.udemy.com/course/openapi-swagger/' }
+    ],
+    suggestions: [
+      { icon:'📖', title:'Master Docs-as-Code', desc:'Learn to write docs using Markdown and manage them via Git just like software source code.' },
+      { icon:'🌐', title:'Learn API Documentation', desc:'API docs are the most in-demand niche. Take Tom Johnson\'s free "Documenting APIs" course.' },
+      { icon:'🛠️', title:'Build a Portfolio', desc:'Create a portfolio with examples of tutorials, how-to guides, and reference docs. Open source contributions are perfect for this.' },
+      { icon:'🗣️', title:'Develop Developer Empathy', desc:'The best technical writers think like developers. Learn the basics of Python or JavaScript to understand your audience.' }
+    ]
+  },
+  'UI/UX Designer': {
+    emoji: '🎨',
+    required: ['Figma','Wireframing','Prototyping','UX Research','Design Principles','Adobe XD','User Testing','Information Architecture','Typography','Color Theory'],
+    roadmap: [
+      { phase:'Phase 1 — Design Basics (Month 1–2)', title:'Visual Design Fundamentals', desc:'Learn core design principles, typography, and color theory.', skills:['Typography','Color Theory','Layout & Grids','Design Principles'] },
+      { phase:'Phase 2 — Tools & Prototyping (Month 2–3)', title:'Figma & Interaction Design', desc:'Master Figma and create high-fidelity interactive prototypes.', skills:['Figma','Wireframing','Prototyping','Component Libraries'] },
+      { phase:'Phase 3 — UX Research (Month 4–5)', title:'User Research & Testing', desc:'Conduct user interviews, usability tests, and create research-backed designs.', skills:['UX Research','User Testing','Information Architecture','Case Studies'] }
+    ],
+    courses: [
+      { title:'Google UX Design Professional Certificate', platform:'Coursera', icon:'🎨', color:'#a855f7', duration:'6 months', rating:'4.8', url:'https://www.coursera.org/professional-certificates/google-ux-design' },
+      { title:'UI/UX Design Masterclass', platform:'Udemy', icon:'✏️', color:'#6366f1', duration:'25 hrs', rating:'4.7', url:'https://www.udemy.com/course/user-experience-design-fundamentals/' },
+      { title:'Figma Complete Course', platform:'YouTube', icon:'🖌️', color:'#10b981', duration:'8 hrs', rating:'4.9', url:'https://www.youtube.com/results?search_query=figma+complete+course' },
+      { title:'Advanced Prototyping in Figma', platform:'YouTube', icon:'⚡', color:'#f59e0b', duration:'5 hrs', rating:'4.9', url:'https://www.youtube.com/results?search_query=advanced+figma+prototyping' },
+      { title:'Web Accessibility (WCAG)', platform:'Coursera', icon:'♿', color:'#06b6d4', duration:'15 hrs', rating:'4.8', url:'https://www.coursera.org/learn/accessibility' },
+      { title:'Color Theory Basics', platform:'Skillshare', icon:'🌈', color:'#ef4444', duration:'6 hrs', rating:'4.7', url:'https://www.skillshare.com/' }
+    ],
+    suggestions: [
+      { icon:'🖼️', title:'Build a Strong Portfolio', desc:'For UI/UX, portfolio beats everything. Complete 3–5 well-documented case studies showing your process from research to final design.' },
+      { icon:'🔬', title:'Practice UX Research', desc:'Conduct user interviews and usability tests. Employers love candidates who back designs with real user data and feedback.' },
+      { icon:'📱', title:'Master Figma Components', desc:'Learn auto-layout, design systems, and component variants in Figma. It dramatically speeds up your workflow and is an industry standard.' },
+      { icon:'🏆', title:'Work on Real Briefs', desc:'Participate in design challenges on Dribbble or redesign existing apps. These show initiative and are great portfolio pieces.' }
+    ]
+  },
+  'Cybersecurity Analyst': {
+    emoji: '🔐',
+    required: ['Networking Fundamentals','Linux','Ethical Hacking','Cryptography','Security Tools (Wireshark)','SIEM','Firewalls & IDS','Vulnerability Assessment','Python Scripting','CompTIA Security+'],
+    roadmap: [
+      { phase:'Phase 1 — Foundation (Month 1–2)', title:'Networking & Linux Basics', desc:'Strong networking knowledge is the bedrock of all cybersecurity work.', skills:['OSI Model','TCP/IP','Linux CLI','Network Protocols'] },
+      { phase:'Phase 2 — Security Concepts (Month 3–4)', title:'Security Tools & Techniques', desc:'Learn how attacks work to better defend against them.', skills:['Ethical Hacking','Wireshark','Nmap','Cryptography'] },
+      { phase:'Phase 3 — Certification & Practice (Month 5–6)', title:'Get Certified & Practice', desc:'Earn CompTIA Security+ and practice on real lab environments.', skills:['CompTIA Security+','TryHackMe Labs','SIEM Tools','Incident Response'] }
+    ],
+    courses: [
+      { title:'CompTIA Security+ (SY0-701)', platform:'Udemy', icon:'🔒', color:'#06b6d4', duration:'35 hrs', rating:'4.8', url:'https://www.udemy.com/course/securityplus/' },
+      { title:'Ethical Hacking Bootcamp', platform:'Udemy', icon:'🕵️', color:'#ef4444', duration:'45 hrs', rating:'4.7', url:'https://www.udemy.com/course/learn-ethical-hacking-from-scratch/' },
+      { title:'Linux for Cybersecurity', platform:'Coursera', icon:'🐧', color:'#a855f7', duration:'12 hrs', rating:'4.6', url:'https://www.coursera.org/courses?query=linux%20security' },
+      { title:'Advanced Penetration Testing', platform:'Udemy', icon:'🛡️', color:'#10b981', duration:'30 hrs', rating:'4.8', url:'https://www.udemy.com/course/advanced-penetration-testing/' },
+      { title:'Splunk Core Certified Power User', platform:'Udemy', icon:'🔍', color:'#f59e0b', duration:'15 hrs', rating:'4.6', url:'https://www.udemy.com/course/splunk-core-certified-power-user/' },
+      { title:'Python for Cybersecurity', platform:'Coursera', icon:'🐍', color:'#6366f1', duration:'20 hrs', rating:'4.7', url:'https://www.coursera.org/learn/python-for-cybersecurity' }
+    ],
+    suggestions: [
+      { icon:'🔒', title:'Get CompTIA Security+', desc:'CompTIA Security+ is the most widely recognized entry-level cybersecurity certification. It validates your baseline knowledge and is required by many employers.' },
+      { icon:'🧪', title:'Practice on TryHackMe', desc:'TryHackMe and HackTheBox offer hands-on cybersecurity labs. Complete beginner rooms daily to build real, practical skills.' },
+      { icon:'🐧', title:'Master Linux CLI', desc:'Almost all security tools run on Linux. Get comfortable with the command line, file permissions, network commands, and scripting.' },
+      { icon:'📡', title:'Learn Wireshark', desc:'Packet analysis is a core security skill. Learn to capture and analyze network traffic to detect anomalies and threats.' }
+    ]
+  },
+  'Data Scientist': {
+    emoji: '📊',
+    required: ['Python','Machine Learning','Statistics','Data Visualization','SQL','Pandas & NumPy','Scikit-learn','Deep Learning','Feature Engineering','TensorFlow / PyTorch'],
+    roadmap: [
+      { phase:'Phase 1 — Math & Python (Month 1–2)', title:'Foundations: Stats & Python', desc:'Build the mathematical and programming foundation for data science.', skills:['Python','Statistics','Probability','Pandas & NumPy'] },
+      { phase:'Phase 2 — Machine Learning (Month 3–4)', title:'ML Algorithms & Practice', desc:'Implement and tune classic ML models on real datasets.', skills:['Scikit-learn','Feature Engineering','Model Evaluation','SQL & Data Wrangling'] },
+      { phase:'Phase 3 — Deep Learning & Projects (Month 5–6)', title:'Deep Learning & Portfolio', desc:'Add neural networks to your toolkit and build a Kaggle portfolio.', skills:['TensorFlow / PyTorch','Computer Vision or NLP','Kaggle Competitions','End-to-end Projects'] }
+    ],
+    courses: [
+      { title:'Machine Learning Specialization', platform:'Coursera', icon:'🤖', color:'#10b981', duration:'3 months', rating:'4.9', url:'https://www.coursera.org/specializations/machine-learning-introduction' },
+      { title:'Python for Data Science & ML', platform:'Udemy', icon:'📊', color:'#6366f1', duration:'22 hrs', rating:'4.7', url:'https://www.udemy.com/course/python-for-data-science-and-machine-learning-bootcamp/' },
+      { title:'Deep Learning Specialization', platform:'Coursera', icon:'🧠', color:'#a855f7', duration:'5 months', rating:'4.9', url:'https://www.coursera.org/specializations/deep-learning' },
+      { title:'SQL for Data Science', platform:'Coursera', icon:'🗄️', color:'#f59e0b', duration:'20 hrs', rating:'4.8', url:'https://www.coursera.org/learn/sql-for-data-science' },
+      { title:'Data Visualization with Tableau', platform:'Coursera', icon:'📈', color:'#ef4444', duration:'25 hrs', rating:'4.7', url:'https://www.coursera.org/learn/data-visualization-tableau' },
+      { title:'Advanced Natural Language Processing', platform:'Coursera', icon:'🗣️', color:'#a855f7', duration:'30 hrs', rating:'4.9', url:'https://www.coursera.org/specializations/natural-language-processing' }
+    ],
+    suggestions: [
+      { icon:'📊', title:'Master Pandas & NumPy', desc:'These are the bread and butter of data science in Python. Get comfortable with data manipulation, cleaning, and EDA before moving to ML.' },
+      { icon:'🧮', title:'Strengthen Your Statistics', desc:'Machine learning is applied statistics. A solid foundation in probability, distributions, hypothesis testing, and regression is essential.' },
+      { icon:'🏆', title:'Compete on Kaggle', desc:'Kaggle competitions are the best way to practice on real-world datasets. Even finishing in the top 50% looks excellent on a resume.' },
+      { icon:'🔮', title:'Learn a Deep Learning Framework', desc:'TensorFlow or PyTorch — pick one and go deep. Neural networks are the backbone of modern AI applications and highly valued.' }
+    ]
+  },
+  'Data Engineer': {
+    emoji: '⚙️',
+    required: ['SQL','Python','Apache Spark','ETL Pipelines','AWS / GCP','Data Warehousing','Kafka','Docker','Hadoop','Airflow'],
+    roadmap: [
+      { phase:'Phase 1 — Data Foundations (Month 1–2)', title:'Advanced SQL & Python', desc:'Master data manipulation, window functions, and advanced SQL querying.', skills:['Advanced SQL','Python (Pandas)','Data Modeling','Relational DBs'] },
+      { phase:'Phase 2 — Big Data & ETL (Month 3–4)', title:'Pipelines & Big Data Tools', desc:'Build ETL pipelines and process large datasets using distributed computing.', skills:['Apache Spark','Airflow','ETL / ELT','Data Lakes'] },
+      { phase:'Phase 3 — Cloud & Streaming (Month 5–6)', title:'Cloud Data Warehouses & Streaming', desc:'Deploy on the cloud and handle real-time streaming data.', skills:['Snowflake / BigQuery','Kafka','AWS / GCP','Docker'] }
+    ],
+    courses: [
+      { title:'Data Engineering Basics', platform:'Coursera', icon:'📊', color:'#10b981', duration:'20 hrs', rating:'4.8', url:'https://www.coursera.org/specializations/data-engineering-foundations' },
+      { title:'Apache Spark with Python', platform:'Udemy', icon:'⚡', color:'#f59e0b', duration:'15 hrs', rating:'4.7', url:'https://www.udemy.com/course/spark-and-python-for-big-data-with-pyspark/' },
+      { title:'Data Warehouse on AWS', platform:'Coursera', icon:'☁️', color:'#6366f1', duration:'12 hrs', rating:'4.8', url:'https://www.coursera.org/learn/data-warehouse-aws' },
+      { title:'Apache Airflow Tutorial', platform:'YouTube', icon:'🔄', color:'#ec4899', duration:'8 hrs', rating:'4.8', url:'https://www.youtube.com/results?search_query=apache+airflow+tutorial' },
+      { title:'Snowflake Masterclass', platform:'Udemy', icon:'❄️', color:'#06b6d4', duration:'20 hrs', rating:'4.7', url:'https://www.udemy.com/course/snowflake-masterclass/' },
+      { title:'Kafka for Beginners', platform:'Udemy', icon:'📨', color:'#10b981', duration:'12 hrs', rating:'4.6', url:'https://www.udemy.com/course/apache-kafka/' }
+    ],
+    suggestions: [
+      { icon:'🗄️', title:'SQL is King', desc:'For Data Engineers, SQL is the absolute most important skill. Master window functions, CTEs, and query optimization.' },
+      { icon:'☁️', title:'Learn a Cloud Warehouse', desc:'Get hands-on experience with modern cloud data warehouses like Snowflake, AWS Redshift, or Google BigQuery.' },
+      { icon:'🔄', title:'Build an End-to-End Pipeline', desc:'Create a portfolio project that extracts data from an API, transforms it with Python/Spark, and loads it into a database.' },
+      { icon:'orchestra', title:'Understand Orchestration', desc:'Learn Apache Airflow. Knowing how to schedule and monitor complex data workflows is highly valued by employers.' }
+    ]
+  },
+  'Cloud Engineer': {
+    emoji: '☁️',
+    required: ['AWS / Azure / GCP','Networking','Docker','Kubernetes','CI/CD Pipelines','Infrastructure as Code','Linux','Python / Bash','Security & Compliance','Load Balancing'],
+    roadmap: [
+      { phase:'Phase 1 — Cloud & Linux Basics (Month 1–2)', title:'Cloud Fundamentals', desc:'Get familiar with cloud services and Linux administration.', skills:['AWS / Azure Basics','Linux Admin','Networking','IAM & Security'] },
+      { phase:'Phase 2 — Containers & IaC (Month 3–4)', title:'Docker, K8s & Terraform', desc:'Master containerization and infrastructure as code.', skills:['Docker','Kubernetes','Terraform','Ansible'] },
+      { phase:'Phase 3 — Certification & Architecture (Month 5–6)', title:'Get Certified & Architect', desc:'Earn a cloud certification and design scalable, resilient architectures.', skills:['AWS Solutions Architect','CI/CD Pipelines','Cost Optimization','Cloud Architecture'] }
+    ],
+    courses: [
+      { title:'AWS Solutions Architect Associate', platform:'Udemy', icon:'☁️', color:'#f59e0b', duration:'28 hrs', rating:'4.8', url:'https://www.udemy.com/course/aws-certified-solutions-architect-associate-saa-c03/' },
+      { title:'Docker & Kubernetes Complete Guide', platform:'Udemy', icon:'🐳', color:'#06b6d4', duration:'22 hrs', rating:'4.8', url:'https://www.udemy.com/course/docker-and-kubernetes-the-complete-guide/' },
+      { title:'HashiCorp Terraform Associate', platform:'Udemy', icon:'🔧', color:'#a855f7', duration:'16 hrs', rating:'4.7', url:'https://www.udemy.com/course/terraform-beginner-to-advanced/' },
+      { title:'GCP Associate Cloud Engineer', platform:'Coursera', icon:'☁️', color:'#ef4444', duration:'40 hrs', rating:'4.8', url:'https://www.coursera.org/professional-certificates/gcp-cloud-engineering' },
+      { title:'Linux System Administration', platform:'Coursera', icon:'🐧', color:'#10b981', duration:'30 hrs', rating:'4.7', url:'https://www.coursera.org/learn/linux-system-administration' },
+      { title:'Azure Fundamentals (AZ-900)', platform:'Udemy', icon:'Ⓜ️', color:'#06b6d4', duration:'15 hrs', rating:'4.6', url:'https://www.udemy.com/course/microsoft-azure-fundamentals-az-900/' }
+    ],
+    suggestions: [
+      { icon:'☁️', title:'Get Cloud Certified', desc:'AWS Solutions Architect Associate is the gold standard entry-level cloud cert. It provides a structured curriculum and validates your skills to employers.' },
+      { icon:'🐳', title:'Master Docker First', desc:'Before Kubernetes, deeply understand Docker — images, containers, networking, and compose files. It\'s the foundation of all container orchestration.' },
+      { icon:'🏗️', title:'Learn Terraform for IaC', desc:'Infrastructure as Code is essential for modern cloud engineering. Terraform is provider-agnostic and heavily demanded in job listings.' },
+      { icon:'🔐', title:'Study Cloud Security', desc:'Security is a critical cloud skill — Learn IAM, VPCs, security groups, encryption at rest/transit, and compliance frameworks like SOC2.' }
+    ]
+  },
+  'DevOps Engineer': {
+    emoji: '⚙️',
+    required: ['Jenkins','Docker','Kubernetes','Linux','Shell Scripting','GitOps','Ansible / Terraform','Monitoring (Prometheus)','CI/CD','Agile & Scrum'],
+    roadmap: [
+      { phase:'Phase 1 — Linux & Scripting (Month 1–2)', title:'Linux & Automation', desc:'Build a strong Linux foundation with scripting and automation skills.', skills:['Linux Admin','Bash Scripting','Python','Git & Version Control'] },
+      { phase:'Phase 2 — CI/CD & Containers (Month 3–4)', title:'Pipelines & Containers', desc:'Set up end-to-end CI/CD pipelines and containerize applications.', skills:['Jenkins / GitHub Actions','Docker','Kubernetes','Ansible'] },
+      { phase:'Phase 3 — Monitoring & Scale (Month 5–6)', title:'Observability & SRE', desc:'Learn to monitor systems at scale and implement SRE practices.', skills:['Prometheus & Grafana','ELK Stack','Terraform','Cloud Infrastructure'] }
+    ],
+    courses: [
+      { title:'DevOps Bootcamp: Docker, K8s, CI/CD', platform:'Udemy', icon:'⚙️', color:'#ef4444', duration:'40 hrs', rating:'4.8', url:'https://www.udemy.com/course/devops-with-docker-kubernetes-and-azure-devops/' },
+      { title:'Jenkins: CI/CD Pipelines', platform:'Udemy', icon:'🔧', color:'#6366f1', duration:'14 hrs', rating:'4.6', url:'https://www.udemy.com/course/jenkins-from-zero-to-hero/' },
+      { title:'Prometheus & Grafana Monitoring', platform:'Udemy', icon:'📈', color:'#10b981', duration:'12 hrs', rating:'4.7', url:'https://www.udemy.com/course/prometheus-and-grafana-the-complete-guide/' },
+      { title:'GitOps with ArgoCD', platform:'YouTube', icon:'🔄', color:'#a855f7', duration:'6 hrs', rating:'4.8', url:'https://www.youtube.com/results?search_query=argocd+gitops' },
+      { title:'Advanced Ansible Playbooks', platform:'Udemy', icon:'🤖', color:'#f59e0b', duration:'12 hrs', rating:'4.7', url:'https://www.udemy.com/course/mastering-ansible/' },
+      { title:'ELK Stack Tutorial', platform:'YouTube', icon:'📊', color:'#ec4899', duration:'10 hrs', rating:'4.6', url:'https://www.youtube.com/results?search_query=elk+stack+tutorial' }
+    ],
+    suggestions: [
+      { icon:'🔄', title:'Build a Full CI/CD Pipeline', desc:'Set up a complete pipeline using Jenkins or GitHub Actions that builds, tests, and deploys an app. This is the #1 project employers want to see.' },
+      { icon:'🐳', title:'Containerize Everything', desc:'Docker and Kubernetes are the heart of modern DevOps. Master container lifecycle, networking, and Helm charts for Kubernetes deployments.' },
+      { icon:'📊', title:'Learn Monitoring & Alerting', desc:'Prometheus + Grafana is the standard observability stack. Set up dashboards and alerts for a sample application to showcase operational thinking.' },
+      { icon:'📝', title:'Automate with Ansible', desc:'Configuration management reduces manual effort dramatically. Learn Ansible playbooks to automate server provisioning and application deployment.' }
+    ]
+  }
+};
+
+/* ── Compute Results ── */
+let role, userSkills, roleData, analysisResult;
+
+function computeResults() {
+  role = sessionStorage.getItem('selectedRole') || 'Software Developer';
+  const raw = sessionStorage.getItem('userSkills');
+  userSkills = raw ? JSON.parse(raw) : [];
+  
+  let savedPresets = null;
+  try {
+    const rawPresets = sessionStorage.getItem('currentRolePresets');
+    if (rawPresets) savedPresets = JSON.parse(rawPresets);
+  } catch(e) {}
+
+  if (ROLE_DATA[role]) {
+    roleData = ROLE_DATA[role];
+    if (savedPresets && savedPresets.length > 0) {
+      roleData.required = savedPresets;
+    }
+  } else {
+    // Dynamic fallback for any role not explicitly defined in ROLE_DATA
+    roleData = {
+      emoji: '🎯',
+      required: (savedPresets && savedPresets.length > 0) ? savedPresets : [role + ' Basics', 'Domain Expertise', 'Problem Solving', 'Communication', 'Industry Tools', 'Analytical Skills'],
+      roadmap: [
+        { phase:'Phase 1 — Foundation', title: role + ' Fundamentals', desc:'Master the core concepts and basic skills required for this role.', skills:['Basics', 'Terminology'] },
+        { phase:'Phase 2 — Intermediate', title:'Tools & Techniques', desc:'Learn the industry-standard tools and methodologies.', skills:['Specialized Tools', 'Best Practices'] },
+        { phase:'Phase 3 — Professional', title:'Advanced Applications', desc:'Apply your skills to real-world scenarios and build a portfolio.', skills:['Real-world Projects', 'Interview Prep'] }
+      ],
+      courses: [
+        { title: 'Complete ' + role + ' Bootcamp', platform: 'Udemy', icon: '🎓', color: '#6366f1', duration: '40 hrs', rating: '4.8', url: 'https://www.udemy.com/courses/search/?q=' + encodeURIComponent(role) },
+        { title: role + ' Fundamentals', platform: 'Coursera', icon: '📚', color: '#10b981', duration: '20 hrs', rating: '4.7', url: 'https://www.coursera.org/courses?query=' + encodeURIComponent(role) },
+        { title: 'Advanced ' + role + ' Techniques', platform: 'Udemy', icon: '⚙️', color: '#a855f7', duration: '25 hrs', rating: '4.6', url: 'https://www.udemy.com/courses/search/?q=' + encodeURIComponent('Advanced ' + role) },
+        { title: 'Mastering the ' + role + ' Interview', platform: 'YouTube', icon: '🌟', color: '#f59e0b', duration: '15 hrs', rating: '4.8', url: 'https://www.youtube.com/results?search_query=' + encodeURIComponent(role + ' interview prep') },
+        { title: 'Real-world ' + role + ' Projects', platform: 'Coursera', icon: '🛠️', color: '#ec4899', duration: '10 hrs', rating: '4.7', url: 'https://www.coursera.org/courses?query=' + encodeURIComponent(role + ' projects') },
+        { title: role + ' Masterclass', platform: 'Skillshare', icon: '✨', color: '#06b6d4', duration: '12 hrs', rating: '4.8', url: 'https://www.skillshare.com/search?query=' + encodeURIComponent(role) }
+      ],
+      suggestions: [
+        { icon: '🎯', title: 'Focus on Core Skills', desc: 'Ensure you have a strong understanding of the fundamental principles of being a ' + role + '.' },
+        { icon: '💡', title: 'Build a Portfolio', desc: 'Create real-world projects that demonstrate your ability to perform the duties of a ' + role + '.' },
+        { icon: '🔗', title: 'Network in Your Field', desc: 'Connect with other professionals in this industry to learn about common tools and practices.' },
+        { icon: '📖', title: 'Stay Updated', desc: 'Follow industry blogs and news to stay up to date on the latest trends for this role.' }
+      ]
+    };
+  }
+
+  const required = roleData.required;
+  const userNames = userSkills.map(s => s.name.toLowerCase());
+
+  const strong = [], weak = [], missing = [];
+
+  required.forEach(req => {
+    const reqLow = req.toLowerCase();
+    const userSkill = userSkills.find(s => {
+      const sLow = s.name.toLowerCase();
+      return sLow === reqLow ||
+        sLow.includes(reqLow.split(' ')[0]) ||
+        reqLow.includes(sLow.split(' ')[0]);
+    });
+    if (userSkill) {
+      if (userSkill.level === 'Advanced') strong.push({ name: req, level: userSkill.level });
+      else weak.push({ name: req, level: userSkill.level });
+    } else {
+      missing.push({ name: req });
+    }
+  });
+
+  // Extra user skills not in required → always strong
+  userSkills.forEach(s => {
+    const inRequired = required.some(r => r.toLowerCase().includes(s.name.toLowerCase().split(' ')[0]) || s.name.toLowerCase().includes(r.toLowerCase().split(' ')[0]));
+    if (!inRequired && s.level === 'Advanced') strong.push({ name: s.name, level: s.level });
+    else if (!inRequired) weak.push({ name: s.name, level: s.level });
+  });
+
+  const totalRequired = required.length;
+  const scoreRaw = Math.round(((strong.length * 1 + weak.length * 0.5) / totalRequired) * 100);
+  const score = Math.min(scoreRaw, 100);
+
+  analysisResult = { role, score, strong, weak, missing,
+    techPct: Math.min(score + 5, 100),
+    toolsPct: Math.max(score - 10, 5),
+    domainPct: Math.max(score - 5, 5)
+  };
+  return analysisResult;
+}
+
+/* ── Grade ── */
+function getGrade(s) {
+  if (s >= 85) return { label:'Excellent Match', emoji:'🏆', color:'#10b981', summary:'You\'re Well Prepared!', desc:'Your skills align strongly. Keep polishing the weak areas and filling remaining gaps.' };
+  if (s >= 65) return { label:'Good Match', emoji:'👍', color:'#6366f1', summary:'Almost There!', desc:'Solid foundation! A few months of focused effort on missing skills will get you job-ready.' };
+  if (s >= 40) return { label:'Fair Match', emoji:'📈', color:'#f59e0b', summary:'Room to Grow', desc:'You have some relevant skills but significant gaps remain. Follow the roadmap systematically.' };
+  return { label:'Needs Work', emoji:'💪', color:'#ef4444', summary:'Strong Foundation Needed', desc:'Good news — everyone starts somewhere! Use the roadmap below to build systematically.' };
+}
+
+/* ── Animate Score ── */
+function animateScore(target) {
+  const arc = document.getElementById('scoreArc');
+  const scoreText = document.getElementById('scoreText');
+  const circumference = 528;
+  let current = 0;
+  const duration = 1800;
+  const startTime = performance.now();
+
+  function update(t) {
+    const elapsed = t - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    current = Math.round(eased * target);
+    arc.style.strokeDashoffset = circumference - (circumference * current / 100);
+    scoreText.textContent = current + '%';
+    if (progress < 1) requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+}
+
+/* ── Render Breakdown Cards ── */
+function renderBreakdown(strong, weak, missing) {
+  // Strong
+  const strongEl = document.getElementById('strongSkillsList');
+  strongEl.innerHTML = strong.length
+    ? strong.map(s => `<div class="breakdown-item"><span class="breakdown-item-icon">✅</span><span style="flex:1;">${s.name}</span><span class="badge badge-success" style="font-size:.72rem;">${s.level || 'Advanced'}</span></div>`).join('')
+    : '<div style="text-align:center;padding:20px;color:var(--text-muted);font-size:.85rem;">Add more skills with Advanced level</div>';
+  document.getElementById('strongBadge').textContent = strong.length;
+  document.getElementById('strongCount').textContent = strong.length;
+
+  // Weak
+  const weakEl = document.getElementById('weakSkillsList');
+  weakEl.innerHTML = weak.length
+    ? weak.map(s => `<div class="breakdown-item"><span class="breakdown-item-icon">⚠️</span><span style="flex:1;">${s.name}</span><span class="badge badge-warning" style="font-size:.72rem;">${s.level || 'Beginner'}</span></div>`).join('')
+    : '<div style="text-align:center;padding:20px;color:var(--text-muted);font-size:.85rem;">No weak skills — great!</div>';
+  document.getElementById('weakBadge').textContent = weak.length;
+  document.getElementById('weakCount').textContent = weak.length;
+
+  // Missing
+  const missingEl = document.getElementById('missingSkillsList');
+  missingEl.innerHTML = missing.length
+    ? missing.map(s => `<div class="breakdown-item"><span class="breakdown-item-icon">❌</span><span style="flex:1;">${s.name}</span><span style="margin-left:auto;font-size:.75rem;color:var(--danger);font-weight:600;">Add this →</span></div>`).join('')
+    : '<div style="text-align:center;padding:20px;color:var(--text-muted);font-size:.85rem;">🎉 No missing skills!</div>';
+  document.getElementById('missingBadge').textContent = missing.length;
+  document.getElementById('missingCount').textContent = missing.length;
+}
+
+/* ── Render Suggestions ── */
+function renderSuggestions(suggestions) {
+  document.getElementById('suggestionCards').innerHTML = suggestions.map(s => `
+    <div class="suggestion-card">
+      <div class="suggestion-icon">${s.icon}</div>
+      <div>
+        <div class="suggestion-title">${s.title}</div>
+        <div class="suggestion-desc">${s.desc}</div>
+      </div>
+    </div>`).join('');
+}
+
+
+/* ── Render Roadmap ── */
+function renderRoadmap(roadmap) {
+  document.getElementById('roadmapTimeline').innerHTML = roadmap.map((item, i) => `
+    <div class="timeline-item" style="animation:slideInLeft .5s ${i*0.15}s ease both;">
+      <div class="timeline-dot"></div>
+      <div class="timeline-phase">${item.phase}</div>
+      <div class="timeline-title">${item.title}</div>
+      <div style="font-size:.88rem;color:var(--text-secondary);">${item.desc}</div>
+      <div class="timeline-skills">
+        ${item.skills.map(s => `<span class="timeline-skill">${s}</span>`).join('')}
+      </div>
+    </div>`).join('');
+}
+
+/* ── Certifications ── */
+function getCertifications(roleName) {
+  const r = roleName.trim();
+  
+  const CERT_MAP = {
+    'Software Developer': [
+      { title: 'Meta Front-End/Back-End Developer Certificate', issuer: 'Coursera', url: 'https://www.coursera.org/' },
+      { title: 'AWS Certified Developer - Associate', issuer: 'Amazon', url: 'https://aws.amazon.com/' },
+      { title: 'Professional Scrum Master (PSM I)', issuer: 'Scrum.org', url: 'https://www.scrum.org/' }
+    ],
+    'Full Stack Developer': [
+      { title: 'IBM Full Stack Software Developer Professional Certificate', issuer: 'Coursera', url: 'https://www.coursera.org/' },
+      { title: 'Meta Back-End Developer Professional Certificate', issuer: 'Coursera', url: 'https://www.coursera.org/' },
+      { title: 'AWS Certified Developer - Associate', issuer: 'Amazon', url: 'https://aws.amazon.com/' }
+    ],
+    'Mobile App Developer': [
+      { title: 'Meta iOS / Android Developer Professional Certificate', issuer: 'Coursera', url: 'https://www.coursera.org/' },
+      { title: 'Associate Android Developer', issuer: 'Google', url: 'https://developer.android.com/' },
+      { title: 'Certified Flutter Developer', issuer: 'Various', url: 'https://flutter.dev/' }
+    ],
+    'Blockchain Developer': [
+      { title: 'Certified Blockchain Expert (CBE)', issuer: 'Blockchain Council', url: 'https://www.blockchain-council.org/' },
+      { title: 'Certified Smart Contract Developer', issuer: 'Blockchain Council', url: 'https://www.blockchain-council.org/' },
+      { title: 'Ethereum Developer Certification', issuer: 'ConsenSys', url: 'https://consensys.net/' }
+    ],
+    'Game Developer': [
+      { title: 'Unity Certified Associate: Game Developer', issuer: 'Unity', url: 'https://unity.com/products/certifications' },
+      { title: 'Unreal Engine Certification', issuer: 'Epic Games', url: 'https://www.unrealengine.com/' },
+      { title: 'C++ Certified Professional Programmer', issuer: 'C++ Institute', url: 'https://cppinstitute.org/' }
+    ],
+    'Machine Learning Engineer': [
+      { title: 'AWS Certified Machine Learning – Specialty', issuer: 'Amazon', url: 'https://aws.amazon.com/' },
+      { title: 'Google Cloud Professional Machine Learning Engineer', issuer: 'Google', url: 'https://cloud.google.com/' },
+      { title: 'DeepLearning.AI TensorFlow Developer', issuer: 'Coursera', url: 'https://www.coursera.org/' }
+    ],
+    'QA Engineer': [
+      { title: 'ISTQB Certified Tester Foundation Level (CTFL)', issuer: 'ISTQB', url: 'https://www.istqb.org/' },
+      { title: 'Certified Software Quality Analyst (CSQA)', issuer: 'QAI', url: 'https://softwarecertifications.org/' },
+      { title: 'Selenium Professional Certification', issuer: 'Various', url: 'https://www.selenium.dev/' }
+    ],
+    'Technical Writer': [
+      { title: 'Certified Professional Technical Communicator (CPTC)', issuer: 'STC', url: 'https://www.stc.org/' },
+      { title: 'Technical Writing Certification', issuer: 'University of Washington', url: 'https://www.pce.uw.edu/' },
+      { title: 'Google Technical Writing Courses', issuer: 'Google', url: 'https://developers.google.com/tech-writing' }
+    ],
+    'Data Scientist': [
+      { title: 'IBM Data Science Professional Certificate', issuer: 'Coursera', url: 'https://www.coursera.org/' },
+      { title: 'Data Science Council of America (DASCA) Senior Data Scientist', issuer: 'DASCA', url: 'https://www.dasca.org/' },
+      { title: 'Microsoft Certified: Azure Data Scientist Associate', issuer: 'Microsoft', url: 'https://learn.microsoft.com/' }
+    ],
+    'Data Analyst': [
+      { title: 'Google Data Analytics Professional Certificate', issuer: 'Coursera', url: 'https://www.coursera.org/' },
+      { title: 'Microsoft Certified: Power BI Data Analyst', issuer: 'Microsoft', url: 'https://learn.microsoft.com/' },
+      { title: 'Tableau Desktop Specialist', issuer: 'Salesforce', url: 'https://www.tableau.com/' }
+    ],
+    'AI Research Scientist': [
+      { title: 'Deep Learning Specialization', issuer: 'DeepLearning.AI', url: 'https://www.coursera.org/' },
+      { title: 'Stanford AI Professional Program', issuer: 'Stanford', url: 'https://online.stanford.edu/' },
+      { title: 'Microsoft Certified: Azure AI Engineer Associate', issuer: 'Microsoft', url: 'https://learn.microsoft.com/' }
+    ],
+    'Data Engineer': [
+      { title: 'Google Cloud Professional Data Engineer', issuer: 'Google', url: 'https://cloud.google.com/' },
+      { title: 'AWS Certified Data Analytics – Specialty', issuer: 'Amazon', url: 'https://aws.amazon.com/' },
+      { title: 'Databricks Certified Data Engineer Professional', issuer: 'Databricks', url: 'https://www.databricks.com/' }
+    ],
+    'Cloud Engineer': [
+      { title: 'AWS Certified Solutions Architect – Associate', issuer: 'Amazon', url: 'https://aws.amazon.com/' },
+      { title: 'Microsoft Certified: Azure Administrator Associate', issuer: 'Microsoft', url: 'https://learn.microsoft.com/' },
+      { title: 'Google Cloud Associate Cloud Engineer', issuer: 'Google', url: 'https://cloud.google.com/' }
+    ],
+    'DevOps Engineer': [
+      { title: 'AWS Certified DevOps Engineer – Professional', issuer: 'Amazon', url: 'https://aws.amazon.com/' },
+      { title: 'Certified Kubernetes Administrator (CKA)', issuer: 'CNCF', url: 'https://training.linuxfoundation.org/' },
+      { title: 'Microsoft Certified: DevOps Engineer Expert', issuer: 'Microsoft', url: 'https://learn.microsoft.com/' }
+    ],
+    'Cybersecurity Analyst': [
+      { title: 'CompTIA Security+', issuer: 'CompTIA', url: 'https://www.comptia.org/' },
+      { title: 'Certified Ethical Hacker (CEH)', issuer: 'EC-Council', url: 'https://www.eccouncil.org/' },
+      { title: 'CISSP - Certified Information Systems Security Professional', issuer: 'ISC2', url: 'https://www.isc2.org/' }
+    ],
+    'Site Reliability Engineer': [
+      { title: 'Certified Kubernetes Administrator (CKA)', issuer: 'CNCF', url: 'https://training.linuxfoundation.org/' },
+      { title: 'Google Cloud Professional Cloud Architect', issuer: 'Google', url: 'https://cloud.google.com/' },
+      { title: 'AWS Certified DevOps Engineer', issuer: 'Amazon', url: 'https://aws.amazon.com/' }
+    ],
+    'UI/UX Designer': [
+      { title: 'Google UX Design Professional Certificate', issuer: 'Coursera', url: 'https://www.coursera.org/' },
+      { title: 'Nielsen Norman Group UX Certification', issuer: 'NN/g', url: 'https://www.nngroup.com/' },
+      { title: 'Certified User Experience Professional (CUXP)', issuer: 'UXPA', url: 'https://uxpa.org/' }
+    ],
+    'Graphic Designer': [
+      { title: 'Adobe Certified Professional (Photoshop/Illustrator)', issuer: 'Adobe', url: 'https://certifiedprofessional.adobe.com/' },
+      { title: 'Graphic Design Specialization', issuer: 'CalArts (Coursera)', url: 'https://www.coursera.org/' },
+      { title: 'Canva Certified Creative', issuer: 'Canva', url: 'https://www.canva.com/' }
+    ],
+    'Video Editor': [
+      { title: 'Adobe Certified Professional in Video Design', issuer: 'Adobe', url: 'https://certifiedprofessional.adobe.com/' },
+      { title: 'Apple Certified Pro - Final Cut Pro', issuer: 'Apple', url: 'https://training.apple.com/' },
+      { title: 'DaVinci Resolve Certification', issuer: 'Blackmagic Design', url: 'https://www.blackmagicdesign.com/' }
+    ],
+    'Product Manager': [
+      { title: 'Certified Scrum Product Owner (CSPO)', issuer: 'Scrum Alliance', url: 'https://www.scrumalliance.org/' },
+      { title: 'Project Management Professional (PMP)', issuer: 'PMI', url: 'https://www.pmi.org/' },
+      { title: 'Pragmatic Institute Product Management Certification', issuer: 'Pragmatic', url: 'https://www.pragmaticinstitute.com/' }
+    ],
+    'Digital Marketing Specialist': [
+      { title: 'Google Ads Certification', issuer: 'Google', url: 'https://skillshop.exceedlms.com/' },
+      { title: 'Meta Certified Digital Marketing Associate', issuer: 'Meta', url: 'https://www.facebook.com/business/learn/certification' },
+      { title: 'HubSpot Inbound Marketing Certification', issuer: 'HubSpot', url: 'https://academy.hubspot.com/' }
+    ],
+    'Doctor / Physician': [
+      { title: 'USMLE / PLAB / NEET PG', issuer: 'Medical Boards', url: '#' },
+      { title: 'Advanced Cardiovascular Life Support (ACLS)', issuer: 'AHA', url: 'https://cpr.heart.org/' },
+      { title: 'MRCP / MRCS (UK Equivalent Specialization)', issuer: 'Royal Colleges', url: '#' }
+    ],
+    'Registered Nurse': [
+      { title: 'NCLEX-RN', issuer: 'NCSBN', url: 'https://www.ncsbn.org/' },
+      { title: 'Basic Life Support (BLS)', issuer: 'AHA', url: 'https://cpr.heart.org/' },
+      { title: 'Certified Pediatric Nurse (CPN)', issuer: 'PNCB', url: 'https://www.pncb.org/' }
+    ],
+    'Medical Lab Technician': [
+      { title: 'Medical Laboratory Scientist (MLS)', issuer: 'ASCP', url: 'https://www.ascp.org/' },
+      { title: 'Certified Phlebotomy Technician (CPT)', issuer: 'NHA', url: 'https://www.nhanow.com/' },
+      { title: 'Clinical Laboratory Assistant (CLA)', issuer: 'ASCP', url: 'https://www.ascp.org/' }
+    ],
+    'Pharmacist': [
+      { title: 'Pharmacist Licensure Examination (NAPLEX)', issuer: 'NABP', url: 'https://nabp.pharmacy/' },
+      { title: 'Board Certified Pharmacotherapy Specialist (BCPS)', issuer: 'BPS', url: 'https://www.bpsweb.org/' },
+      { title: 'Certified Pharmacy Technician (CPhT)', issuer: 'PTCB', url: 'https://www.ptcb.org/' }
+    ],
+    'Chartered Accountant': [
+      { title: 'Chartered Accountant (CA)', issuer: 'ICAI / ACCA', url: 'https://www.icai.org/' },
+      { title: 'Certified Public Accountant (CPA)', issuer: 'AICPA', url: 'https://www.aicpa.org/' },
+      { title: 'Certified Management Accountant (CMA)', issuer: 'IMA', url: 'https://www.imanet.org/' }
+    ],
+    'Financial Analyst': [
+      { title: 'Chartered Financial Analyst (CFA)', issuer: 'CFA Institute', url: 'https://www.cfainstitute.org/' },
+      { title: 'Financial Risk Manager (FRM)', issuer: 'GARP', url: 'https://www.garp.org/' },
+      { title: 'Financial Modeling & Valuation Analyst (FMVA)', issuer: 'CFI', url: 'https://corporatefinanceinstitute.com/' }
+    ],
+    'Investment Banker': [
+      { title: 'Chartered Financial Analyst (CFA)', issuer: 'CFA Institute', url: 'https://www.cfainstitute.org/' },
+      { title: 'Certified M&A Professional', issuer: 'NYIF', url: 'https://www.nyif.com/' },
+      { title: 'FINRA Series 79', issuer: 'FINRA', url: 'https://www.finra.org/' }
+    ],
+    'Civil Engineer': [
+      { title: 'Professional Engineer (PE) License', issuer: 'NCEES', url: 'https://ncees.org/' },
+      { title: 'AutoCAD Civil 3D Certified Professional', issuer: 'Autodesk', url: 'https://www.autodesk.com/certification' },
+      { title: 'LEED Green Associate', issuer: 'USGBC', url: 'https://www.usgbc.org/' }
+    ],
+    'Mechanical Engineer': [
+      { title: 'Professional Engineer (PE) License', issuer: 'NCEES', url: 'https://ncees.org/' },
+      { title: 'Certified SolidWorks Professional (CSWP)', issuer: 'Dassault Systèmes', url: 'https://www.solidworks.com/' },
+      { title: 'Six Sigma Green Belt', issuer: 'ASQ', url: 'https://asq.org/' }
+    ],
+    'Electrical Engineer': [
+      { title: 'Professional Engineer (PE) License', issuer: 'NCEES', url: 'https://ncees.org/' },
+      { title: 'Certified Automation Professional (CAP)', issuer: 'ISA', url: 'https://www.isa.org/' },
+      { title: 'AutoCAD Electrical Certification', issuer: 'Autodesk', url: 'https://www.autodesk.com/certification' }
+    ],
+    'Lawyer / Advocate': [
+      { title: 'Bar Council Examination / License', issuer: 'State Bar Council', url: '#' },
+      { title: 'Certified Information Privacy Professional (CIPP)', issuer: 'IAPP', url: 'https://iapp.org/' },
+      { title: 'Corporate Law Certification', issuer: 'NLU / Coursera', url: 'https://www.coursera.org/' }
+    ],
+    'HR Manager': [
+      { title: 'SHRM Certified Professional (SHRM-CP)', issuer: 'SHRM', url: 'https://www.shrm.org/' },
+      { title: 'Professional in Human Resources (PHR)', issuer: 'HRCI', url: 'https://www.hrci.org/' },
+      { title: 'Certified Compensation Professional (CCP)', issuer: 'WorldatWork', url: 'https://worldatwork.org/' }
+    ],
+    'Agricultural Scientist': [
+      { title: 'Certified Professional Agronomist (CPAg)', issuer: 'ASA', url: 'https://www.agronomy.org/' },
+      { title: 'GIS Data Specialist Certification', issuer: 'Esri', url: 'https://www.esri.com/' },
+      { title: 'Certified Crop Advisor (CCA)', issuer: 'ASA', url: 'https://www.certifiedcropadviser.org/' }
+    ],
+    'Environmental Engineer': [
+      { title: 'Board Certified Environmental Engineer (BCEE)', issuer: 'AAEES', url: 'https://www.aaees.org/' },
+      { title: 'LEED Accredited Professional (LEED AP)', issuer: 'USGBC', url: 'https://www.usgbc.org/' },
+      { title: 'Certified Hazardous Materials Manager (CHMM)', issuer: 'IHMM', url: 'https://ihmm.org/' }
+    ]
+  };
+
+  // Exact match
+  if (CERT_MAP[r]) {
+    return CERT_MAP[r];
+  }
+
+  // Fallback pattern matching
+  const rl = r.toLowerCase();
+  if (rl.includes('data') || rl.includes('machine') || rl.includes('ai')) {
+    return CERT_MAP['Data Scientist'];
+  } else if (rl.includes('cloud') || rl.includes('devops') || rl.includes('reliability') || rl.includes('infra')) {
+    return CERT_MAP['Cloud Engineer'];
+  } else if (rl.includes('security') || rl.includes('cyber')) {
+    return CERT_MAP['Cybersecurity Analyst'];
+  } else if (rl.includes('design') || rl.includes('ux') || rl.includes('ui')) {
+    return CERT_MAP['UI/UX Designer'];
+  } else if (rl.includes('product') || rl.includes('business')) {
+    return CERT_MAP['Product Manager'];
+  } else {
+    return CERT_MAP['Software Developer'];
+  }
+}
+
+function renderCertifications(roleName) {
+  const certs = getCertifications(roleName);
+  document.getElementById('certificationsList').innerHTML = certs.map((c, i) => `
+    <div style="display:flex;align-items:center;gap:16px;background:var(--bg-card);border:1px solid var(--border);padding:16px;border-radius:var(--radius-md);animation:slideInRight 0.5s ${i*0.1}s ease both;">
+      <div style="font-size:2rem;">🎓</div>
+      <div style="flex:1;">
+        <div style="font-weight:700;font-size:1.05rem;color:var(--text-primary);">${c.title}</div>
+        <div style="font-size:.85rem;color:var(--text-muted);margin-top:4px;">Issued by ${c.issuer}</div>
+      </div>
+      <a href="${c.url}" target="_blank" rel="noopener" class="btn btn-sm btn-ghost" style="padding:6px 12px;font-size:0.85rem;border:1px solid var(--border);">View Detail</a>
+    </div>
+  `).join('');
+}
+
+/* ── Share / Save ── */
+function shareResults(method) {
+  const score = analysisResult ? analysisResult.score : 0;
+  const text = `I scored ${score}% on Skill Match for ${role} role! Check your own career readiness at skill-match.app`;
+  if (method === 'copy') { navigator.clipboard.writeText(window.location.href).then(() => showToast('🔗 Link copied!', 'success')); }
+  else if (method === 'linkedin') { window.open('https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(window.location.href), '_blank'); }
+}
+
+
+
+/* ── INIT ── */
+document.addEventListener('DOMContentLoaded', () => {
+  const r = computeResults();
+  const grade = getGrade(r.score);
+
+  // Update header
+  document.getElementById('resultsSubtitle').textContent =
+    `Here's how your skills match up for "${r.role}" — you scored ${r.score}% job readiness.`;
+
+  // Score card
+  document.getElementById('scoreRoleLabel').textContent = r.role + ' ' + roleData.emoji;
+  const gradeBadge = document.getElementById('scoreGradeBadge');
+  gradeBadge.style.background = `linear-gradient(135deg, ${grade.color}, ${grade.color}aa)`;
+  document.getElementById('gradeText').textContent = grade.label;
+  document.getElementById('scoreGrade').textContent = grade.emoji + ' ' + grade.label;
+  document.getElementById('scoreGrade').setAttribute('fill', grade.color);
+  document.getElementById('scoreSummaryTitle').textContent = grade.summary;
+  document.getElementById('scoreSummaryDesc').textContent = grade.desc;
+
+  // Animate score
+  setTimeout(() => {
+    animateScore(r.score);
+    // Animate bars
+    setTimeout(() => {
+      document.getElementById('techBar').style.width = r.techPct + '%';
+      document.getElementById('toolsBar').style.width = r.toolsPct + '%';
+      document.getElementById('domainBar').style.width = r.domainPct + '%';
+      document.getElementById('techPct').textContent = r.techPct + '%';
+      document.getElementById('toolsPct').textContent = r.toolsPct + '%';
+      document.getElementById('domainPct').textContent = r.domainPct + '%';
+    }, 400);
+  }, 300);
+
+  // Breakdown
+  renderBreakdown(r.strong, r.weak, r.missing);
+
+  // Suggestions
+  renderSuggestions(roleData.suggestions);
+
+
+  // Roadmap
+  renderRoadmap(roleData.roadmap);
+
+  // Certifications
+  setTimeout(() => renderCertifications(r.role), 600);
+});
+</script>
+</body>
+</html>
