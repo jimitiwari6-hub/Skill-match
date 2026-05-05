@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://skilmatch.netlify.app/sitemap.xml
