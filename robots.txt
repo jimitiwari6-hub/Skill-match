@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://skilmatch.netlify.app/sitemap.xml
+Sitemap: https://gapvice.netlify.app/sitemap.xml
