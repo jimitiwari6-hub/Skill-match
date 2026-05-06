@@ -1,12 +1,12 @@
 /* ============================================================
-   Skill Match — app.js v2
+   GapVice — app.js v2
    Enhanced: particles · cursor glow · ripple · page loader
    · counter animations · scroll-based effects · theme
    ============================================================ */
 
 /* ── Apply saved theme immediately (no FOUC) ── */
 (function () {
-  const t = localStorage.getItem('skillmatch_theme') || 'light';
+  const t = localStorage.getItem('gapvice_theme') || 'light';
   document.documentElement.setAttribute('data-theme', t);
 })();
 
@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function () {
    DYNAMIC CONTENT LOADER (Admin Persistence)
 ══════════════════════════════════════════════ */
 function loadDynamicContent() {
-  const settings = JSON.parse(localStorage.getItem('skillmatch_settings') || '{}');
+  const settings = JSON.parse(localStorage.getItem('gapvice_settings') || '{}');
   
   if (settings.headline) {
     const el = document.getElementById('dynamicHeroTitle');
