@@ -1,5 +1,5 @@
- 🚀 Skill Match
-Skill Match is a smart web-based platform that helps users evaluate their suitability for different job roles based on their existing skills. 
+ 🚀 GapVice
+GapVice is a smart web-based platform that helps users evaluate their suitability for different job roles based on their existing skills. 
 It bridges the gap between a user's current abilities and industry requirements by providing personalized insights and improvement suggestions.
 
 🌐 Live Demo
@@ -41,7 +41,7 @@ It bridges the gap between a user's current abilities and industry requirements 
 
 
 🎯 Purpose
-The goal of Skill Match is to help users understand:
+The goal of GapVice is to help users understand:
 * Which career roles suit them best
 * What skills they are missing
 * How they can improve to reach their target job
