@@ -34,9 +34,11 @@ It bridges the gap between a user's current abilities and industry requirements 
 3. Open `index.html` in your browser
   
 📸 Screenshots
-<img width="1909" height="1079" alt="Screenshot 2026-05-04 131130" src="https://github.com/user-attachments/assets/f238703e-3b34-421b-9f86-c27c326b7016" />
-<img width="1919" height="1079" alt="Screenshot 2026-05-04 131053" src="https://github.com/user-attachments/assets/d1bcf89f-5c29-4726-8ef4-01e58ec49fe2" />
-<img width="1906" height="984" alt="Screenshot 2026-05-04 131111" src="https://github.com/user-attachments/assets/e6ff1bd3-8d76-44e0-a30d-66aec6680dbd" />
+
+<img width="1901" height="1071" alt="Screenshot 2026-05-06 104309" src="https://github.com/user-attachments/assets/279e6721-3750-4393-80f2-93e836d3d6cb" />
+<img width="1908" height="1070" alt="Screenshot 2026-05-06 104253" src="https://github.com/user-attachments/assets/8255e2f6-83d4-4ccb-9bff-41b7b0649199" />
+<img width="1904" height="957" alt="Screenshot 2026-05-06 104218" src="https://github.com/user-attachments/assets/6c2ed4f6-bb9b-422e-be11-636c72c4b4b3" />
+
 
 
 
