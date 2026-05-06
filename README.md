@@ -3,7 +3,7 @@ GapVice is a smart web-based platform that helps users evaluate their suitabilit
 It bridges the gap between a user's current abilities and industry requirements by providing personalized insights and improvement suggestions.
 
 🌐 Live Demo
-👉 https://skilmatch.netlify.app/
+👉 https://gapvice.netlify.app/
 
 📌 Features
 * 🔍 Skill-based job role recommendations
@@ -30,7 +30,7 @@ It bridges the gap between a user's current abilities and industry requirements 
 1. Clone the repository   
    git clone https://github.com/your-username/skill-match.git
 2. Open the project folder   
-   cd skill-match
+   cd gapvice
 3. Open `index.html` in your browser
   
 📸 Screenshots
